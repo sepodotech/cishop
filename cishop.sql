@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2020 at 03:19 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 5.6.40
+-- Generation Time: Apr 28, 2020 at 11:04 PM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -81,7 +80,7 @@ CREATE TABLE `admin_submenu` (
   `title` varchar(128) NOT NULL,
   `url` varchar(128) NOT NULL,
   `icon` varchar(128) NOT NULL,
-  `is_active` int(1) NOT NULL DEFAULT '1'
+  `is_active` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -163,27 +162,6 @@ INSERT INTO `product` (`id`, `image`, `name`, `category_id`, `description`, `qua
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role`
---
-
-CREATE TABLE `role` (
-  `id` int(11) NOT NULL,
-  `role` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `role`
---
-
-INSERT INTO `role` (`id`, `role`) VALUES
-(1, 'CEO'),
-(2, 'admin'),
-(3, 'member'),
-(4, 'customer');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `user`
 --
 
@@ -194,6 +172,7 @@ CREATE TABLE `user` (
   `image` varchar(100) NOT NULL,
   `password` varchar(256) NOT NULL,
   `role_id` int(5) NOT NULL,
+  `member_status` int(1) NOT NULL,
   `is_active` int(1) NOT NULL,
   `date_created` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -202,10 +181,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `email`, `image`, `password`, `role_id`, `is_active`, `date_created`) VALUES
-(4, 'habib', 'habib@gmail.com', 'default.jpg', '$2y$10$TmYQSy3pJuRja7BC7gMrMemy3yL6VfkrOnM9cvmy6r0RTeeLg/bsm', 1, 1, 0),
-(6, 'isna', 'isna@gmail.com', 'default.jpg', '$2y$10$fYr7vK0Fs5h6GorFpNX1JOxnpV8D1WIq8RBnznmf5ArH2uC6rdXVq', 2, 1, 0),
-(7, 'isnatul', 'isnatul@gmail.com', 'default.jpg', '$2y$10$d.Z8FR4lA8laXdL4OUyK9ui1HSmeQ0fumTGeVRPn6.ovIprXj5aSi', 3, 0, 1583337842);
+INSERT INTO `user` (`id`, `username`, `email`, `image`, `password`, `role_id`, `member_status`, `is_active`, `date_created`) VALUES
+(4, 'habib', 'habib@gmail.com', 'default.jpg', '$2y$10$TmYQSy3pJuRja7BC7gMrMemy3yL6VfkrOnM9cvmy6r0RTeeLg/bsm', 1, 0, 1, 0),
+(6, 'isna', 'isna@gmail.com', 'default.jpg', '$2y$10$fYr7vK0Fs5h6GorFpNX1JOxnpV8D1WIq8RBnznmf5ArH2uC6rdXVq', 2, 0, 1, 0),
+(7, 'isnatul', 'isnatul@gmail.com', 'default.jpg', '$2y$10$d.Z8FR4lA8laXdL4OUyK9ui1HSmeQ0fumTGeVRPn6.ovIprXj5aSi', 3, 0, 0, 1583337842),
+(8, 'pelanggan', 'pelanggan1@gmail.com', 'default.jpg', '$2y$10$UsjzPxn90D6zux.7ybs2vOI0TJdVD/AR1FPafK6O5JyAPSYpr/o.6', 3, 0, 0, 1588082617);
 
 -- --------------------------------------------------------
 
@@ -229,6 +209,27 @@ CREATE TABLE `user_address` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_role`
+--
+
+CREATE TABLE `user_role` (
+  `id` int(11) NOT NULL,
+  `role` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_role`
+--
+
+INSERT INTO `user_role` (`id`, `role`) VALUES
+(1, 'CEO'),
+(2, 'admin'),
+(3, 'member'),
+(4, 'customer');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `voucher`
 --
 
@@ -239,7 +240,7 @@ CREATE TABLE `voucher` (
   `amount` varchar(20) NOT NULL,
   `valid_from_date` int(10) UNSIGNED NOT NULL,
   `valid_to_date` int(10) UNSIGNED NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1-enabled, 0-disabled'
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1-enabled, 0-disabled'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -283,12 +284,6 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `role`
---
-ALTER TABLE `role`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -298,6 +293,12 @@ ALTER TABLE `user`
 -- Indexes for table `user_address`
 --
 ALTER TABLE `user_address`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_role`
+--
+ALTER TABLE `user_role`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -347,22 +348,22 @@ ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `role`
---
-ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_address`
 --
 ALTER TABLE `user_address`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_role`
+--
+ALTER TABLE `user_role`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `voucher`

@@ -62,11 +62,11 @@ class Auth extends CI_Controller {
                     //--redirect user;
                     
                     if($user['role_id'] == 1 ) {
-                            redirect('useraccess/ceo');
+                            redirect('userAccess/ceo');
                         } elseif ($user['role_id'] == 2 ) {
-                            redirect('useraccess/admin');
+                            redirect('userAccess/admin');
                         } elseif ($user['role_id'] == 3 && $user['member_status'] == 1 ) {
-                            redirect('useraccess/member');
+                            redirect('userAccess/member');
                         }else {
                             redirect('home/index');
                         }
@@ -135,7 +135,7 @@ class Auth extends CI_Controller {
                     'password'  	=> password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
                     'role_id'   	=> 3,
                     'member_status' => 0,
-                    'is_active' 	=> 0,
+                    'is_active' 	=> 1,
                     'date_created' 	=> time()
                     ];
             // insert into database
