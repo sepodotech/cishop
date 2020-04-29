@@ -94,22 +94,63 @@
   <?php endforeach; ?>
 	<hr>
 	<!-- check whether user has address or not -->
-	<?php if (isset($user)) : ?>
-		<?php if (isset($getAddress)) : ?>
+	<?php if ($user) : ?>
+		<?php if ($getAddress) : ?>
 			<div class="row">
-				<div>alamat tersedia</div>
+				<div>pilih ongkir</div>
+			</div>
 		<?php 	else : ?>
 			<div class="row">
 				<div>isikan alamat</div>
 				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
 			</div>
 		<?php endif; ?>
-	<?php elseif (isset($getAddress)) : ?>
+	<?php elseif ($getAddress) : ?>
 	<div class="row">
-		<div>pilih ongkir</div>
+		<div>pilih ongkir tanpa login</div>
 	</div>
 	<?php else : ?>
-
+	<h5>Masukkan Identitas</h5>
+	<form action="" method="post">
+		<div class="form-group">
+			<label for="name">nama</label>
+			<input type="text" class="form-control" id="name" name="name">
+		</div>
+		<div class="form-group">
+			<label for="phone">Nomer HP</label>
+			<input type="text" class="form-control" id="phone" name="phone">
+		</div>
+		<div class="form-group">
+			<label for="Province">Provinsi</label>
+			<select class="form-control" id="Province" name="province">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="city">kabupaten/kota</label>
+			<select class="form-control" id="city" name="city">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="subdistrict">kecamatan</label>
+			<input type="text" class="form-control" id="subdistrict" name="subdistrict">
+		</div>
+		<div class="form-group">
+			<label for="detail-address">Alamat Lebih Lengkap</label>
+			<textarea class="form-control" id="detail-address" name="detail-address" rows="4"></textarea>
+		</div>
+		<button class="btn btn-primary mb-4" type="submit">simpan</button>
+	</form>
+	
 	<?php endif; ?>
 	<!-- buttom navbar visible only small dan medium size -->
       <div class="d-lg-none">

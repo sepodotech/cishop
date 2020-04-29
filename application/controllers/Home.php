@@ -38,7 +38,7 @@ class Home extends CI_Controller {
 		$data['user'] 		= $this->user;
 		$data['title']		= 'Keranjang Saya';
 		$data['backArrow']	= 'home';
-		$data['getAddress']	= $this->User_model->joinUserAddress();
+		$data['getAddress']	= $this->User_model->getUserAddress();
 		
 		$this->load->view('store/templates/header',$data);
 		$this->load->view('store/templates/order_topbar',$data);

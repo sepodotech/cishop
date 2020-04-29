@@ -12,19 +12,23 @@
         </div>
         <div class="col-md-12 col-lg-4 ml-3 mt-4">
             <div class="d-flex justify-content-center text-uppercase">
-            <h4 class="font-weight-bolder"><?= $singleProduct['name']; ?></h4>
+                <h4 class="font-weight-bolder"><?= $singleProduct['name']; ?></h4>
             </div>
 
             <hr id="detile-product">
-            <div class="d-flex justify-content-left text-capitalize">
-            <h5><?= 'Harga : ' . 'Rp' . $singleProduct['price']; ?></h5>
+            <div class="justify-content-left text-capitalize">
+                <h5 class="font-weight-bolder">Harga : </h5>
+                <h5><?='Rp' . $singleProduct['price']; ?></h5>
             </div>
-          
-            <div class="d-flex justify-content-left text-capitalize">
-            <h5><?= 'kategori : ' . $singleProduct['category_id']; ?></h5>
+            <br>
+            <div class="justify-content-left text-capitalize">
+                <h5 class="font-weight-bolder">Kategori : </h5>
+                <h5><?= $singleProduct['category_id']; ?></h5>
             </div>
-            <div class="d-flex justify-content-left text-capitalize">
-            <h5><?= 'deskripsi : ' . $singleProduct['description']; ?></h5>
+            <br>
+            <div class="justify-content-left text-capitalize">
+                <h5 class="font-weight-bolder">Deskripsi : </h5>
+                <h5><?= $singleProduct['description']; ?></h5>
             </div>
             <hr>
             <!-- visible only in large scale -->
