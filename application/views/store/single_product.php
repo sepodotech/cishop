@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 px-auto text-center bg-dark mt-3">
-            <h1 class=" h3 font-weight-bolder text-uppercase text-light"><?= $title ?></h1>
+            <h1 class="h3 font-weight-bolder text-uppercase text-light pt-1"><?= $title ?></h1>
         </div>
     </div>
     <div class="row mt-2">

@@ -12,4 +12,13 @@ class User_model extends CI_Model
 	{
 		return $this->db->get('user_address')->result_array();
 	}
+
+	public function joinUserAddress()
+	{
+		$this->db->select('user.*, user_address.*')
+						->from('user')
+						 ->join('user_address','user.id = user_address.user_id');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

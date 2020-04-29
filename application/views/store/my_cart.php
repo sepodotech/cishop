@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row mb-4">
 	<div class="col-4 col-md-3 font-weight-bolder d-none d-sm-block">Produk</div>
@@ -93,16 +94,22 @@
   <?php endforeach; ?>
 	<hr>
 	<!-- check whether user has address or not -->
-	<?php if (isset($getAddress)) : ?>
+	<?php if (isset($user)) : ?>
+		<?php if (isset($getAddress)) : ?>
+			<div class="row">
+				<div>alamat tersedia</div>
+		<?php 	else : ?>
+			<div class="row">
+				<div>isikan alamat</div>
+				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
+			</div>
+		<?php endif; ?>
+	<?php elseif (isset($getAddress)) : ?>
 	<div class="row">
-		<div>isikan alamat</div>
-		<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
+		<div>pilih ongkir</div>
 	</div>
-	<?php 	else : ?>
-	<div class="row">
-		<div>silahkan lanjutkan belanja</div>
-		
-	</div>
+	<?php else : ?>
+
 	<?php endif; ?>
 	<!-- buttom navbar visible only small dan medium size -->
       <div class="d-lg-none">
