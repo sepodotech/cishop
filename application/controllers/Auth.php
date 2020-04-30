@@ -49,7 +49,7 @@ class Auth extends CI_Controller {
                 if(password_verify($password, $user['password']))
                 {
                     
-                    //--data for session
+                    //--store data for session
 
                     $data = [
                         'email'     		=> $user['email'],
@@ -57,8 +57,9 @@ class Auth extends CI_Controller {
                         'member_status'     => $user['member_status']
                     ];
 
-                    $this->session->set_userdata($data);
-
+					$this->session->set_userdata($data);
+					
+				
                     //--redirect user;
                     
                     if($user['role_id'] == 1 ) {

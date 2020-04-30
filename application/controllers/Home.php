@@ -101,5 +101,27 @@ class Home extends CI_Controller {
 		$this->load->view('store/templates/footer');
 	}
 
+	public function test()
+	{
+		$data = [
+
+			'name'  => htmlspecialchars($this->input->post('name',true)),
+			'phone'     => htmlspecialchars($this->input->post('phone',true)),
+			'province' => htmlspecialchars($this->input->post('province',true)),
+			'city' => htmlspecialchars($this->input->post('city',true)),
+			'subdistrict' => htmlspecialchars($this->input->post('subdistrict',true)),
+			'detail' => htmlspecialchars($this->input->post('detail-address',true)),
+			
+		];
+
+		
+		$this->session->set_userdata($data);
+		
+		
+		
+		redirect('Home/myCart');
+
+	}
+
 	
 }

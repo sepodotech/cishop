@@ -56,6 +56,14 @@
 	<div class="col-md-3 d-none d-sm-block">
 		<?= number_format($items['subtotal'],0,',','.'); ?>
 	</div>
+	<div class="col-md-3 d-none d-sm-block">
+		<a href="#" class="text-decoration-none" data-toggle="modal" data-target="#edit_cart">
+		    <i class="fas fa-edit fa-lg"></i>   
+		</a>
+		<a class="pl-2 text-danger" data-toggle="modal" data-target="#delete_cart">
+				<i class="fas fa-trash-alt fa-lg"></i>
+		</a>
+	</div>
 	<!-- product subtotal price display when small width -->
 	<div class="col-4 d-block d-md-none">
 		<div class="collapse show" id="collapseExample">
@@ -76,19 +84,7 @@
 	    			</a>
 				</div>
 			</div>
-		    
-		    
 		</div>
-	</div>
-	<div class="col-md-3 d-none d-sm-block">
-		<a href="#" class="text-decoration-none" data-toggle="modal" data-target="#edit_cart">
-                 <i class="fas fa-edit fa-lg"></i>   
-        </a>
-              
-            
-	    <a class="pl-2 text-danger" data-toggle="modal" data-target="#delete_cart">
-	            <i class="fas fa-trash-alt fa-lg"></i>
-	    </a>
 	</div>
   </div>
   <?php endforeach; ?>
@@ -105,13 +101,14 @@
 				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
 			</div>
 		<?php endif; ?>
-	<?php elseif ($getAddress) : ?>
+		<!-- user dosn't login but already input address form -->
+	<?php elseif ($this->session->userdata('name')) : ?>
 	<div class="row">
 		<div>pilih ongkir tanpa login</div>
 	</div>
 	<?php else : ?>
 	<h5>Masukkan Identitas</h5>
-	<form action="" method="post">
+	<form action="<?= base_url('home/tempAddress'); ?>" method="post">
 		<div class="form-group">
 			<label for="name">nama</label>
 			<input type="text" class="form-control" id="name" name="name">
