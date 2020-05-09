@@ -34,6 +34,7 @@
                   <input type="number" class="" id="qty" name="qty" value="1">
                   <input type="hidden" id="price" name="price" value="<?= $singleProduct['price']; ?>">
                   <input type="hidden" id="image" name="image" value="<?= $singleProduct['image']; ?>">
+                  <input type="hidden" id="weight" name="weight" value="<?= $singleProduct['weight']; ?>">
               
             </div>
             <div class="modal-footer">

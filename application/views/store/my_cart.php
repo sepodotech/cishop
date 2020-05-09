@@ -1,4 +1,6 @@
+<?php
 
+?>
 <div class="container-fluid">
   <div class="row mb-4">
 	<div class="col-4 col-md-3 font-weight-bolder d-none d-sm-block">Produk</div>
@@ -103,12 +105,34 @@
 		<?php endif; ?>
 		<!-- user dosn't login but already input address form -->
 	<?php elseif ($this->session->userdata('name')) : ?>
-	<div class="row">
-		<div>pilih ongkir tanpa login</div>
-	</div>
+		<p>Ingin merubah alamat Pengiriman?</p>
+		<div class="row">
+			<div class="col-6 text-center">
+			<a href="#" class="" data-toggle="modal" data-target="#edit_Tempdata">
+				<i class="fas fa-edit fa-lg"></i>
+			</a>
+			</div>
+			<div class="col-6 text-center">
+			<a href="<?= base_url('home/deleteTempAddress'); ?>" class="text-danger text-decoration-none">
+				<i class="fas fa-trash-alt fa-lg"></i>
+
+				</a>
+			</div>
+		</div>
+		<hr>
+		<form action="<?= base_url('home/addcourier'); ?>" method="post">
+			<div class="form-group">
+				<label for="courier">Pilih Jasa Kirim</label>
+				<select class="form-control courier" id="courier" name="courier">
+					<option>JNE</option>
+					<option>POS</option>
+				</select>
+			</div>
+		</form>
+		<div class="hasil"></div>
 	<?php else : ?>
 	<h5>Masukkan Identitas</h5>
-	<form action="<?= base_url('home/tempAddress'); ?>" method="post">
+	<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
 		<div class="form-group">
 			<label for="name">nama</label>
 			<input type="text" class="form-control" id="name" name="name">
@@ -118,25 +142,19 @@
 			<input type="text" class="form-control" id="phone" name="phone">
 		</div>
 		<div class="form-group">
-			<label for="Province">Provinsi</label>
-			<select class="form-control" id="Province" name="province">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
+			<label for="destination_province">Provinsi</label>
+			<select class="destination_province form-control" id="destination_province" >
+				<option value=""> Pilih Provinsi</option>
 			</select>
 		</div>
+		<input type="hidden" class="province" name="province">
 		<div class="form-group">
-			<label for="city">kabupaten/kota</label>
-			<select class="form-control" id="city" name="city">
-				<option>1</option>
-				<option>2</option>
-				<option>3</option>
-				<option>4</option>
-				<option>5</option>
+			<label for="destination_city">kabupaten/kota</label>
+			<select class="destination_city form-control" name="city" id="destination_city">
+				<option value=""> Pilih Kota</option>
 			</select>
 		</div>
+		<input type="hidden" class="city" name="city">
 		<div class="form-group">
 			<label for="subdistrict">kecamatan</label>
 			<input type="text" class="form-control" id="subdistrict" name="subdistrict">
@@ -145,80 +163,109 @@
 			<label for="detail-address">Alamat Lebih Lengkap</label>
 			<textarea class="form-control" id="detail-address" name="detail-address" rows="4"></textarea>
 		</div>
+		<input type="hidden" class="" name="courier" value="JNE">
+		<input type="hidden" class="" name="weight" value="<?= $weight?>">
 		<button class="btn btn-primary mb-4" type="submit">simpan</button>
 	</form>
 	
 	<?php endif; ?>
 	<!-- buttom navbar visible only small dan medium size -->
-      <div class="d-lg-none">
-			<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
-			    <ul class="d-flex flex-column navbar-nav mr-auto">
-			      <li class="nav-item active">
-			      	<small>Total Belanja</small>
-			        
-			      </li>
-			      <li class="nav-item font-weight-bolder text-danger h5">
-			        Rp <?= number_format($this->cart->total(),0,',','.'); ?>
-			      </li>
-			    </ul>
-			    <form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/checkout') ?>">
-			    	<button type="submit" class="btn btn-danger btn-lg">
-			    		<a href="<?= base_url('home/checkout') ?>" class="text-light text-decoration-none">
-			    			Checkout
-			    		</a>
-			    	</button>
-			      
-			    </form>
-			  
-			</nav>
+	<div class="d-lg-none">
+		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+			<ul class="d-flex flex-column navbar-nav mr-auto">
+				<li class="nav-item active">
+				<small>Total Belanja</small>
+				
+				</li>
+				<li class="nav-item font-weight-bolder text-danger h5">
+				Rp <?= number_format($this->cart->total(),0,',','.'); ?>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/checkout') ?>">
+				<button type="submit" class="btn btn-danger btn-lg">
+					<a href="<?= base_url('home/checkout') ?>" class="text-light text-decoration-none">
+						Checkout
+					</a>
+				</button>
+				
+			</form>
+			
+		</nav>
+	</div>
+	<!-- modal for edit cart -->
+	<div class="modal fade" id="edit_cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-uppercase font-weight-bold">masukkan jumlah barang
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+				<p class="justify-content-left text-capitalize">
+				
+				</p>
 
-	<!-- modal for edit order -->
-  <div class="modal fade" id="edit_cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<form action="<?= base_url('home/updateCart') ?>" method="post">
+					<input type="hidden" name="rowid" value="<?= $items['rowid']; ?>">
+					<input type="number" name="qty" value="<?= $items['qty']; ?>">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+					<button type="submit" class="btn btn-primary">Tambah Jumlah Produk</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+    <!-- modal for delete cart -->
+    <div class="modal fade" id="delete_cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            
-                  <div class="modal-header">
-                    <h5 class="modal-title text-uppercase font-weight-bold">masukkan jumlah barang
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                  <p class="justify-content-left text-capitalize">
-                  
-                  </p>
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-uppercase font-weight-bold text-danger">Yakin Ingin Hapus
+						</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+						<a href="<?= base_url('home/removeCart/') . $items['rowid']; ?>" class="btn btn-danger">Hapus</a>
+					</div>
+			</div>
+        </div>
+	</div>
+	<!-- edit tempdata -->
+	<div class="modal fade" id="edit_tempdata" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-uppercase font-weight-bold">masukkan jumlah barang
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+				<p class="justify-content-left text-capitalize">
+				
+				</p>
 
-                  <form action="<?= base_url('home/updateCart') ?>" method="post">
-                      <input type="hidden" name="rowid" value="<?= $items['rowid']; ?>">
-                      <input type="number" name="qty" value="<?= $items['qty']; ?>">
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Tambah Jumlah Produk</button>
-                  </div>
-                  </form>
-            
-          </div>
-        </div>
-      </div>
-	  </div>
-      <!-- modal for delete cart -->
-      <div class="modal fade" id="delete_cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title text-uppercase font-weight-bold text-danger">Yakin Ingin Hapus
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <a href="<?= base_url('home/removeCart/') . $items['rowid']; ?>" class="btn btn-danger">Hapus</a>
-                  </div>
-          </div>
-        </div>
-      </div>
+				<form action="<?= base_url('home/updateCart') ?>" method="post">
+					<input type="hidden" name="rowid" value="<?= $items['rowid']; ?>">
+					<input type="number" name="qty" value="<?= $items['qty']; ?>">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+					<button type="submit" class="btn btn-primary">Tambah Jumlah Produk</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
+
+

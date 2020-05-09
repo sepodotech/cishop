@@ -5,6 +5,11 @@ class Home extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		$this->weight = 0;
+		foreach($this->cart->contents() as $item)
+		{
+		$this->weight += $item['weight']*$item['qty'];
+		}
 	}
 
 	public function index()
@@ -39,11 +44,12 @@ class Home extends CI_Controller {
 		$data['title']		= 'Keranjang Saya';
 		$data['backArrow']	= 'home';
 		$data['getAddress']	= $this->User_model->getUserAddress();
+		$data['weight'] 	= $this->weight;
 		
 		$this->load->view('store/templates/header',$data);
 		$this->load->view('store/templates/order_topbar',$data);
 		$this->load->view('store/my_cart',$data);
-		$this->load->view('store/templates/footer');
+		$this->load->view('store/templates/footer',$data);
 	}
 
 	public function addCart()
@@ -54,7 +60,8 @@ class Home extends CI_Controller {
 			'name'		=> $this->input->post('name'),
 			'qty'		=> htmlspecialchars($this->input->post('qty',true)),
 			'price'		=> $this->input->post('price'),
-			'image'		=> $this->input->post('image')	
+			'image'		=> $this->input->post('image'),
+			'weight'	=> $this->input->post('weight')	
 		];
 		
 	$this->cart->insert($data);
@@ -101,27 +108,27 @@ class Home extends CI_Controller {
 		$this->load->view('store/templates/footer');
 	}
 
-	public function test()
+	public function addTempAddress()
 	{
 		$data = [
 
-			'name'  => htmlspecialchars($this->input->post('name',true)),
-			'phone'     => htmlspecialchars($this->input->post('phone',true)),
-			'province' => htmlspecialchars($this->input->post('province',true)),
-			'city' => htmlspecialchars($this->input->post('city',true)),
-			'subdistrict' => htmlspecialchars($this->input->post('subdistrict',true)),
-			'detail' => htmlspecialchars($this->input->post('detail-address',true)),
+			'name'  		=> htmlspecialchars($this->input->post('name',true)),
+			'phone'     	=> htmlspecialchars($this->input->post('phone',true)),
+			'province' 		=> htmlspecialchars($this->input->post('province',true)),
+			'city' 			=> htmlspecialchars($this->input->post('city',true)),
+			'subdistrict' 	=> htmlspecialchars($this->input->post('subdistrict',true)),
+			'detail' 		=> htmlspecialchars($this->input->post('detail-address',true)),
+			'courier' 		=> htmlspecialchars($this->input->post('courier',true)),
+			'weight' 		=> htmlspecialchars($this->input->post('weight',true))
 			
 		];
-
-		
 		$this->session->set_userdata($data);
-		
-		
-		
 		redirect('Home/myCart');
-
 	}
 
-	
+	public function deleteTempAddress()
+	{
+		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier');
+		redirect('Home/myCart');
+	}
 }

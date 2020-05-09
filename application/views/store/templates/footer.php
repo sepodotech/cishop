@@ -49,6 +49,129 @@
 
     <!-- custom js -->
     <script src="<?= base_url('assets/') ?>/vendor/custom/js/custom.js"></script>
+
+    <!-- /script js/ -->
+    
+<script type="text/javascript">
+	$(document).ready(function (){
+
+		// for page my_cart 
+		function Province() {
+			$.getJSON("<?= base_url('Shipping/province') ?>", function(data){
+				$.each(data, function(i, opt) {
+					$('.destination_province').append('<option value="'+opt.province_id+'">'+opt.province+ '</option>')
+				});
+			});
+		}
+
+		Province();
+
+		function city(idprov){
+			$.getJSON("<?= base_url('shipping/city/') ?>"+idprov, function(data){
+				$.each(data, function(i, opt) {
+					$('.destination_city').append('<option value="'+opt.city_id+'">'+opt.type+' '+opt.city_name+'</option>')
+				});
+			});
+		}
+		// get selection 
+		$(".destination_province").on("change", function(data){
+			data.preventDefault();
+			var provi = $('option:selected', this).text();
+			$('.province').val(provi);
+		});
+
+		$(".destination_province").on("change", function(e){
+		e.preventDefault();
+		var option = $('option:selected', this).val();
+		$('.destination_city option:gt(0)').remove();
+		$('.courier').val('');
+
+		if(option==='')
+		{
+			alert('null');    
+			$(".destination_city").prop("disabled", true);
+			$(".courier").prop("disabled", true);
+		}
+		else
+		{        
+			$(".destination_city").prop("disabled", false);
+			city(option);
+		}
+		});
+
+		$(".destination_city").on("change", function(data){
+			data.preventDefault();
+			var city = $('option:selected', this).text();
+			$('.city').val(city);
+		});
+		
+		$(".destination_city").on("change", function(e){
+		e.preventDefault();
+		var option = $('option:selected', this).val();
+		$('.courier').val('');
+
+		if(option==='')
+		{
+			alert('null');    
+			$(".courier").prop("disabled", true);
+		}
+		else
+		{        
+			$(".courier").prop("disabled", false);    
+		}
+		});
+
+		
+		$(".courier").on("change", function(e){
+		e.preventDefault();
+		let courier = $('option:selected', this).val();
+		let origin = "492"; // id kota tulungagung
+		let dest = $(".destination_city").val();
+		let weight = <?php echo $weight ?>;
+		
+		if(weight==='0' || weight==='')
+		{
+			alert('jumlah barang belum di isi');
+		}
+		else if(courier==='')
+		{
+			alert('pilih jasa pengiriman');        
+		}
+		else
+		{            
+			cost(origin,dest,weight,courier);
+		}
+		});
+
+		function cost(origin,dest,weight,courier) {
+		
+		var i, j, x = "";
+		
+		$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
+			console.log(data)
+			// $.each(data, function(i,field){  
+				
+
+			// for(i in field.costs)
+			// {
+			// 	x += "<p class='mb-0'><b>" + field.costs[i].service + "</b> : "+field.costs[i].description+"</p>";
+
+			// 	for (j in field.costs[i].cost) {
+			// 			x += field.costs[i].cost[j].value +"<br>"+field.costs[i].cost[j].etd+"<br>"+field.costs[i].cost[j].note;
+			// 		}
+				
+			// }
+
+			// $(".hasil").html(x);
+
+			// });
+		});
+		}
+		// end for page my_cart
+	});
+
+</script>
+    
     
 </body>
 

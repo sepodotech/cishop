@@ -13,7 +13,8 @@
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/fontawesome-free/css/all.min.css">
     <!-- fontawesome -->
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/sbadmin/css/sb-admin-2.min.css">
-
+ 
+  
     <title><?= $title; ?></title>
   </head>
   <body id="page-top">
