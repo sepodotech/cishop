@@ -105,31 +105,7 @@
 		<?php endif; ?>
 		<!-- user dosn't login but already input address form -->
 	<?php elseif ($this->session->userdata('name')) : ?>
-		<p>Ingin merubah alamat Pengiriman?</p>
-		<div class="row">
-			<div class="col-6 text-center">
-			<a href="#" class="" data-toggle="modal" data-target="#edit_Tempdata">
-				<i class="fas fa-edit fa-lg"></i>
-			</a>
-			</div>
-			<div class="col-6 text-center">
-			<a href="<?= base_url('home/deleteTempAddress'); ?>" class="text-danger text-decoration-none">
-				<i class="fas fa-trash-alt fa-lg"></i>
 
-				</a>
-			</div>
-		</div>
-		<hr>
-		<form action="<?= base_url('home/addcourier'); ?>" method="post">
-			<div class="form-group">
-				<label for="courier">Pilih Jasa Kirim</label>
-				<select class="form-control courier" id="courier" name="courier">
-					<option>JNE</option>
-					<option>POS</option>
-				</select>
-			</div>
-		</form>
-		<div class="hasil"></div>
 	<?php else : ?>
 	<h5>Masukkan Identitas</h5>
 	<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
@@ -163,10 +139,15 @@
 			<label for="detail-address">Alamat Lebih Lengkap</label>
 			<textarea class="form-control" id="detail-address" name="detail-address" rows="4"></textarea>
 		</div>
+		<div class="form-group">
+			<label for="courier">Pilih Jasa Kirim</label>
+			<select class="form-control courier" id="courier" name="courier">
+				<option value="jne" >JNE Reguler</option>
+				<option value="pos" >POS Kilat Khusus</option>
+			</select>
+		</div>
 		<input type="hidden" class="" name="courier" value="JNE">
 		<input type="hidden" class="" name="weight" value="<?= $weight?>">
-		<button class="btn btn-primary mb-4" type="submit">simpan</button>
-	</form>
 	
 	<?php endif; ?>
 	<!-- buttom navbar visible only small dan medium size -->
@@ -178,17 +159,15 @@
 				
 				</li>
 				<li class="nav-item font-weight-bolder text-danger h5">
-				Rp <?= number_format($this->cart->total(),0,',','.'); ?>
+				Rp <?php $total = $this->cart->total();
+				
+				echo number_format($total,0,',','.'); 
+				
+				?>
 				</li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/checkout') ?>">
-				<button type="submit" class="btn btn-danger btn-lg">
-					<a href="<?= base_url('home/checkout') ?>" class="text-light text-decoration-none">
-						Checkout
-					</a>
-				</button>
-				
-			</form>
+				<button type="submit" class="btn btn-danger btn-lg">Checkout</button>
+	</form>
 			
 		</nav>
 	</div>
@@ -238,34 +217,7 @@
 			</div>
         </div>
 	</div>
-	<!-- edit tempdata -->
-	<div class="modal fade" id="edit_tempdata" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title text-uppercase font-weight-bold">masukkan jumlah barang
-					</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-				<p class="justify-content-left text-capitalize">
-				
-				</p>
 
-				<form action="<?= base_url('home/updateCart') ?>" method="post">
-					<input type="hidden" name="rowid" value="<?= $items['rowid']; ?>">
-					<input type="number" name="qty" value="<?= $items['qty']; ?>">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-					<button type="submit" class="btn btn-primary">Tambah Jumlah Produk</button>
-				</div>
-				</form>
-			</div>
-		</div>
-	</div>
 </div>
 
 

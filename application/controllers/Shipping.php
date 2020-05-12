@@ -103,8 +103,20 @@ class Shipping extends CI_Controller{
     
     $response = curl_exec($curl);
     $err = curl_error($curl);
-    
     curl_close($curl);
+
+    $response = json_decode($response, true);
+    $response = $response['rajaongkir']['results'][0];
+    
+    if($response['code'] == 'jne'){
+      $response = $response['costs'][1]['cost'][0]['value'];
+    }else{
+      $response = $response['costs'][0]['cost'][0]['value'];
+    }
+    
+    $response = json_encode($response);
+    
+    
     
     if ($err) {
       echo "cURL Error #:" . $err;

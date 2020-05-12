@@ -1,5 +1,5 @@
 <!-- start navbar -->
-    	<nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #05b7c2;">
+    	<nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #05b7c2">
 		  
 		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>

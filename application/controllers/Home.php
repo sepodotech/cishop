@@ -81,8 +81,8 @@ class Home extends CI_Controller {
 			'rowid'		=> $this->input->post('rowid'),
 			'qty'		=> htmlspecialchars($this->input->post('qty', true))
 		];
-	$this->cart->update($data);
-	redirect('home/myCart');
+		$this->cart->update($data);
+		redirect('home/myCart');
 	}
 
 	public function setting()
@@ -123,12 +123,12 @@ class Home extends CI_Controller {
 			
 		];
 		$this->session->set_userdata($data);
-		redirect('Home/myCart');
+		redirect('Home/checkout');
 	}
 
 	public function deleteTempAddress()
 	{
-		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier');
+		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier','weight');
 		redirect('Home/myCart');
 	}
 }

@@ -138,7 +138,7 @@
 			alert('pilih jasa pengiriman');        
 		}
 		else
-		{            
+		{   
 			cost(origin,dest,weight,courier);
 		}
 		});
@@ -149,25 +149,11 @@
 		
 		$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
 			console.log(data)
-			// $.each(data, function(i,field){  
-				
+			
 
-			// for(i in field.costs)
-			// {
-			// 	x += "<p class='mb-0'><b>" + field.costs[i].service + "</b> : "+field.costs[i].description+"</p>";
-
-			// 	for (j in field.costs[i].cost) {
-			// 			x += field.costs[i].cost[j].value +"<br>"+field.costs[i].cost[j].etd+"<br>"+field.costs[i].cost[j].note;
-			// 		}
-				
-			// }
-
-			// $(".hasil").html(x);
-
-			// });
+			
 		});
 		}
-		// end for page my_cart
 	});
 
 </script>
