@@ -144,15 +144,17 @@
 		});
 
 		function cost(origin,dest,weight,courier) {
-		
-		var i, j, x = "";
-		
-		$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
-			console.log(data)
-			
-
-			
-		});
+			let totalBarang = <?= $this->cart->total(); ?>;
+			let biayaOngkir = "";
+			// console.log(totalBelanja);
+			$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
+				
+				biayaOngkir += `<P>biaya ongkir anda `+data+`</P>`;
+				$("#ongkir").html(biayaOngkir);
+				let totalShoppig = parseInt(data)+totalBarang;
+				$("#totalShopping").text(totalShoppig);
+				$("#total-shopping").val(totalShoppig);
+			});
 		}
 	});
 

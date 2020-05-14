@@ -1,5 +1,9 @@
 <?php
+   if($_POST){
+    $test = $_POST['mytets'];
 
+    var_dump($test);
+}
 ?>
 <div class="container-fluid">
   <div class="row mb-4">
@@ -91,8 +95,9 @@
   </div>
   <?php endforeach; ?>
 	<hr>
-	<!-- check whether user has address or not -->
+	<!-- check whether user has loggin or not -->
 	<?php if ($user) : ?>
+		<!-- when user logged in, check there wes address or not -->
 		<?php if ($getAddress) : ?>
 			<div class="row">
 				<div>pilih ongkir</div>
@@ -103,9 +108,7 @@
 				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
 			</div>
 		<?php endif; ?>
-		<!-- user dosn't login but already input address form -->
-	<?php elseif ($this->session->userdata('name')) : ?>
-
+	<!-- user dosn't log in -->
 	<?php else : ?>
 	<h5>Masukkan Identitas</h5>
 	<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
@@ -126,6 +129,8 @@
 		<input type="hidden" class="province" name="province">
 		<div class="form-group">
 			<label for="destination_city">kabupaten/kota</label>
+			<br>
+			<small class="text-success">jika belum muncul, mohon tunggu!</small>
 			<select class="destination_city form-control" name="city" id="destination_city">
 				<option value=""> Pilih Kota</option>
 			</select>
@@ -146,9 +151,8 @@
 				<option value="pos" >POS Kilat Khusus</option>
 			</select>
 		</div>
-		<input type="hidden" class="" name="courier" value="JNE">
-		<input type="hidden" class="" name="weight" value="<?= $weight?>">
-	
+		<input type="hidden" class="" name="weight" value="<?= $weight; ?>">
+		<div id="ongkir"></div>
 	<?php endif; ?>
 	<!-- buttom navbar visible only small dan medium size -->
 	<div class="d-lg-none">
@@ -158,14 +162,14 @@
 				<small>Total Belanja</small>
 				
 				</li>
-				<li class="nav-item font-weight-bolder text-danger h5">
-				Rp <?php $total = $this->cart->total();
-				
+				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
+				Rp 
+				<!-- <?php $total = $this->cart->total();
 				echo number_format($total,0,',','.'); 
-				
-				?>
+				?> -->
 				</li>
 			</ul>
+				<input type="hidden" value="" id="total-shopping" name="total-shopping">
 				<button type="submit" class="btn btn-danger btn-lg">Checkout</button>
 	</form>
 			

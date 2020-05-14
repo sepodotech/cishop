@@ -1,3 +1,8 @@
+<?php
+$test = $this->session->userdata("shopping");
+$test = intval($test);
+var_dump($test);
+?>
 <div class="container-fluid">
   <div class="row mb-4">
 	<div class="col-4 col-md-3 font-weight-bolder">Produk</div>
@@ -81,7 +86,7 @@
 		        
 		      </li>
 		      <li class="nav-item font-weight-bolder text-danger h5">
-		        Rp <?= number_format($this->cart->total(),0,',','.'); ?>
+		        Rp <?= number_format($test,0,',','.'); ?>
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/payment') ?>">

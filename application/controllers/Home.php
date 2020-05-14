@@ -119,7 +119,8 @@ class Home extends CI_Controller {
 			'subdistrict' 	=> htmlspecialchars($this->input->post('subdistrict',true)),
 			'detail' 		=> htmlspecialchars($this->input->post('detail-address',true)),
 			'courier' 		=> htmlspecialchars($this->input->post('courier',true)),
-			'weight' 		=> htmlspecialchars($this->input->post('weight',true))
+			'weight' 		=> htmlspecialchars($this->input->post('weight',true)),
+			'shopping' 		=> htmlspecialchars($this->input->post('total-shopping',true))
 			
 		];
 		$this->session->set_userdata($data);
