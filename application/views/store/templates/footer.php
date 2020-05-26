@@ -151,8 +151,10 @@
 				
 				biayaOngkir += `<P>biaya ongkir anda `+data+`</P>`;
 				$("#ongkir").html(biayaOngkir);
+
 				let totalShoppig = parseInt(data)+totalBarang;
-				$("#totalShopping").text(totalShoppig);
+
+				$("#totalShopping").text("Rp "+totalShoppig);
 				$("#total-shopping").val(totalShoppig);
 			});
 		}

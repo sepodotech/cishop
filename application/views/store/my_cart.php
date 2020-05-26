@@ -108,7 +108,24 @@
 				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
 			</div>
 		<?php endif; ?>
-	<!-- user dosn't log in -->
+	<!-- user dosn't log in but there was temporary data in session -->
+	<?php elseif ($this->session->userdata('name')) : ?>
+	<!-- buttom navbar visible only small dan medium size -->
+	<div class="d-lg-none">
+		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+			<ul class="d-flex flex-column navbar-nav mr-auto">
+				<li class="nav-item active">
+				<small>Total Belanja dan ongkir</small>
+				
+				</li>
+				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
+					Rp
+					<?= number_format($this->session->userdata('shopping'),0,',','.')?>
+				</li>
+			</ul>
+				<a href="<?= base_url('home/checkout')?>" class="btn btn-danger btn-lg">Checkout</a>
+		</nav>
+	</div>
 	<?php else : ?>
 	<h5>Masukkan Identitas</h5>
 	<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
@@ -122,6 +139,8 @@
 		</div>
 		<div class="form-group">
 			<label for="destination_province">Provinsi</label>
+			<br>
+			<small class="text-success">jika belum muncul, mohon tunggu!</small>
 			<select class="destination_province form-control" id="destination_province" >
 				<option value=""> Pilih Provinsi</option>
 			</select>
@@ -153,28 +172,26 @@
 		</div>
 		<input type="hidden" class="" name="weight" value="<?= $weight; ?>">
 		<div id="ongkir"></div>
-	<?php endif; ?>
+	
 	<!-- buttom navbar visible only small dan medium size -->
 	<div class="d-lg-none">
 		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
 			<ul class="d-flex flex-column navbar-nav mr-auto">
 				<li class="nav-item active">
-				<small>Total Belanja</small>
+				<small>Total Belanja dan ongkir</small>
 				
 				</li>
 				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
-				Rp 
-				<!-- <?php $total = $this->cart->total();
-				echo number_format($total,0,',','.'); 
-				?> -->
+				Rp 0
 				</li>
 			</ul>
 				<input type="hidden" value="" id="total-shopping" name="total-shopping">
 				<button type="submit" class="btn btn-danger btn-lg">Checkout</button>
 	</form>
-			
 		</nav>
 	</div>
+	<?php endif; ?>		
+		
 	<!-- modal for edit cart -->
 	<div class="modal fade" id="edit_cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">

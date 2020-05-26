@@ -1,7 +1,5 @@
 <?php
-$test = $this->session->userdata("shopping");
-$test = intval($test);
-var_dump($test);
+$totalshopping = intval($this->session->userdata("shopping"));
 ?>
 <div class="container-fluid">
   <div class="row mb-4">
@@ -63,20 +61,7 @@ var_dump($test);
 	<?php endforeach; ?>
 	<hr>
 	<p>Ingin merubah alamat Pengiriman?</p>
-		<div class="row">
-			<div class="col-6 text-center">
-			<a href="#" class="" data-toggle="modal" data-target="#edit_Tempdata">
-				<i class="fas fa-edit fa-lg"></i>
-			</a>
-			</div>
-			<div class="col-6 text-center">
-			<a href="<?= base_url('home/deleteTempAddress'); ?>" class="text-danger text-decoration-none">
-				<i class="fas fa-trash-alt fa-lg"></i>
-
-				</a>
-			</div>
-		</div>
-		<hr>
+			<a href="<?= base_url('home/deleteTempAddress'); ?>" class="btn btn-danger">Hapus alamat</a>
 		
 	<div class="d-lg-none">
 		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
@@ -86,16 +71,22 @@ var_dump($test);
 		        
 		      </li>
 		      <li class="nav-item font-weight-bolder text-danger h5">
-		        Rp <?= number_format($test,0,',','.'); ?>
+		        Rp <?= number_format($totalshopping,0,',','.'); ?>
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/payment') ?>">
 		      <?php foreach ($this->cart->contents() as $items): ?>
-		      <input type="hidden" name="rowid" value="<?= $items['rowid']; ?>">
-		      <input type="hidden" name="rowid" value="<?= $items['name']; ?>">
+		      <input type="hidden" name="product-name" value="<?= $items['name']; ?>">
 	          <input type="hidden" name="qty" value="<?= $items['qty']; ?>">
 	          <?php endforeach; ?>
-		      <input type="hidden" name="qty" value="<?= $this->cart->total();?>">
+		      <input type="hidden" name="total-shopping" value="<?= $totalshopping;?>">
+			  <input type="hidden" name="buyer-name" value="<?= $this->session->userdata('name');?>">
+			  <input type="hidden" name="phone" value="<?= $this->session->userdata('phone');?>">
+			  <input type="hidden" name="province" value="<?= $this->session->userdata('province');?>">
+			  <input type="hidden" name="city" value="<?= $this->session->userdata('city');?>">
+			  <input type="hidden" name="subdistrict" value="<?= $this->session->userdata('subdistrict');?>">
+			  <input type="hidden" name="detail" value="<?= $this->session->userdata('detail');?>">
+			  <input type="hidden" name="courier" value="<?= $this->session->userdata('courier');?>">
 		      <button type="button" class="btn btn-danger btn-lg">Buat Pesanan</button>
 		    </form>
 		  

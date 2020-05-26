@@ -13,7 +13,7 @@
         <?php endif; ?>
         <?= $this->session->flashdata('message'); ?>
 
-      <a href="" class="btn btn-primary mb-3" data-toggle="modal" data-target="#ProductModal">Tambah produk</a>
+      <a href="<?= base_url(); ?>adminProduct/addProduct" class="btn btn-primary mb-3">Tambah produk</a>
           <table class="table table-hover">
         <thead>
           <tr>
@@ -51,7 +51,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="ProductModal" tabindex="-1" role="dialog" aria-labelledby="ProductModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="ProductModal" tabindex="-1" role="dialog" aria-labelledby="ProductModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -98,4 +98,4 @@
       </form>
     </div>
   </div>
-</div>
+</div> -->

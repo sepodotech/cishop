@@ -14,14 +14,26 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
-		$data['user'] 		= $this->user;
-		$data['product']	= $this->Product_model->getallproduct();
-		$data['title']		= 'shop';
-	
-		$this->load->view('store/templates/header',$data);
-		$this->load->view('store/templates/topbar',$data);
-		$this->load->view('index',$data);
-		$this->load->view('store/templates/footer');
+		if($this->user){
+			if ($this->user['role_id'] == 1) {
+				redirect('userAccess/ceo');
+			} elseif ($this->user['role_id'] == 2 ) {
+				redirect('userAccess/admin');
+			} elseif ($this->user['role_id'] == 3 && $this->user['member_status'] == 1 ) {
+				redirect('userAccess/member');
+			}
+		}else {
+			$data['user'] 		= $this->user;
+			$data['product']	= $this->Product_model->getallproduct();
+			$data['title']		= 'shop';
+		
+			$this->load->view('store/templates/header',$data);
+			$this->load->view('store/templates/topbar',$data);
+			$this->load->view('index',$data);
+			$this->load->view('store/templates/footer');
+		}
+		
+		
 	}
 
 	public function singleProduct($id)
@@ -129,7 +141,23 @@ class Home extends CI_Controller {
 
 	public function deleteTempAddress()
 	{
-		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier','weight');
+		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier','weight','shopping');
 		redirect('Home/myCart');
+	}
+	public function payment()
+	{
+		$data = [
+
+			'product-name'  		=> $this->input->post('product-name'),
+			'qty'     				=> $this->input->post('phone',true),
+			'total-shopping' 		=> $this->input->post('total-shopping',true),
+			'buyer-name'  			=> $this->input->post('buyer-name',true),
+			'phone'     			=> $this->input->post('phone',true),
+			'province' 				=> $this->input->post('province',true),
+			'city' 					=> $this->input->post('city',true),
+			'subdistrict' 			=> $this->input->post('subdistrict',true),
+			'detail' 				=> $this->input->post('detail-address',true),
+			'courier' 				=> $this->input->post('courier',true)
+		];
 	}
 }

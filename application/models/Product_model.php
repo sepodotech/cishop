@@ -65,5 +65,9 @@ class Product_model extends CI_Model
             return array_map('unlink', glob(FCPATH."./assets/upload/products/$filename.*"));
         }
     }
+    public function createOrder()
+    {
+        
+    }
 
 }
