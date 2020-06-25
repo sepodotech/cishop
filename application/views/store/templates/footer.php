@@ -42,19 +42,17 @@
 
     <!-- Core plugin JavaScript-->
     <script src="<?= base_url('assets/') ?>vendor/jquery-easing/jquery.easing.min.js"></script>
-    
-    
+
     <!-- plugin sb admin-->
     <script src="<?= base_url('assets/') ?>vendor/sbadmin/js/sb-admin-2.min.js"></script>
 
     <!-- custom js -->
     <script src="<?= base_url('assets/') ?>/vendor/custom/js/custom.js"></script>
 
-    <!-- /script js/ -->
     
 <script type="text/javascript">
+	/*-------------start script page my cart for shipping--------------*/
 	$(document).ready(function (){
-
 		// for page my_cart 
 		function Province() {
 			$.getJSON("<?= base_url('Shipping/province') ?>", function(data){
@@ -81,22 +79,12 @@
 		});
 
 		$(".destination_province").on("change", function(e){
-		e.preventDefault();
-		var option = $('option:selected', this).val();
-		$('.destination_city option:gt(0)').remove();
-		$('.courier').val('');
-
-		if(option==='')
-		{
-			alert('null');    
-			$(".destination_city").prop("disabled", true);
-			$(".courier").prop("disabled", true);
-		}
-		else
-		{        
-			$(".destination_city").prop("disabled", false);
+			e.preventDefault();
+			var option = $('option:selected', this).val();
+			$('.destination_city option:gt(0)').remove();
+			$('.courier').val('');
 			city(option);
-		}
+		
 		});
 
 		$(".destination_city").on("change", function(data){
@@ -106,61 +94,60 @@
 		});
 		
 		$(".destination_city").on("change", function(e){
-		e.preventDefault();
-		var option = $('option:selected', this).val();
-		$('.courier').val('');
-
-		if(option==='')
-		{
-			alert('null');    
-			$(".courier").prop("disabled", true);
-		}
-		else
-		{        
-			$(".courier").prop("disabled", false);    
-		}
+			e.preventDefault();
+			var option = $('option:selected', this).val();
+			$('.courier').val('');
 		});
 
 		
 		$(".courier").on("change", function(e){
-		e.preventDefault();
-		let courier = $('option:selected', this).val();
-		let origin = "492"; // id kota tulungagung
-		let dest = $(".destination_city").val();
-		let weight = <?php echo $weight ?>;
-		
-		if(weight==='0' || weight==='')
-		{
-			alert('jumlah barang belum di isi');
-		}
-		else if(courier==='')
-		{
-			alert('pilih jasa pengiriman');        
-		}
-		else
-		{   
+			e.preventDefault();
+			let courier = $('option:selected', this).val();
+			let origin = "492"; // id kota tulungagung
+			let dest = $(".destination_city").val();
+			let weight = <?php echo $weight; ?>;
 			cost(origin,dest,weight,courier);
-		}
 		});
 
+		
 		function cost(origin,dest,weight,courier) {
 			let totalBarang = <?= $this->cart->total(); ?>;
-			let biayaOngkir = "";
-			// console.log(totalBelanja);
+			let biayaOngkir;
 			$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
 				
 				biayaOngkir += `<P>biaya ongkir anda `+data+`</P>`;
 				$("#ongkir").html(biayaOngkir);
 
 				let totalShoppig = parseInt(data)+totalBarang;
-
 				$("#totalShopping").text("Rp "+totalShoppig);
 				$("#total-shopping").val(totalShoppig);
 			});
 		}
-	});
 
+		$("#edit_cart").click(function(e){
+			e.preventDefault();
+			if ()
+		})
+	/*-------------end script page my_cart shipping--------------*/
+
+	/*-------------start script for single product info--------------*/
+		let element_variant = <?php echo $variants ?>;
+		$(".option1").click(function(data){
+			data.preventDefault();
+			let product_id = $(this).val();
+			let stock = element_variant.filter(x => x.id == product_id).map(x => x.option_stok);
+			stock = stock.toString();
+			stock = `<p class="text-uppercase"> stok `+stock+`</p>`;
+			$(".stock").html(stock);
+
+			let product_option = $(this).text();
+			$("#option1").val(product_option);
+		})
+	/*-------------end script for single product info--------------*/
+
+	});
 </script>
+
     
     
 </body>

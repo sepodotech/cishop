@@ -31,20 +31,20 @@
 			</div>
 		</div>
 	</div>
-	<!--  -->
+	<!-- end banner  -->
 	<div class="row mt-2">
 		<?php foreach ($product as $p) : ?>
 		<div class="col-6 col-md-4 col-lg-2">
-			<a class="text-dark text-decoration-none" href="<?= base_url('home/singleProduct/') . $p['id']; ?>">
+			<a class="text-dark text-decoration-none" href="<?= base_url('home/singleProduct/') . $p['id'] . '/' . $p['SKU']; ?>">
 				<div class="card border-3 shadow-lg my-1">
 					
 				    <img src="<?= base_url('assets/upload/products/') . $p['image']; ?>" class="card-img-top" alt="...">
 				  
 				    <div class="card-body">
 				      <h6 class="card-title font-weight-bolder text-info"><?= $p['name'] ?></h6>
-				      <small>Rp. <?= $p['price'] ?></small>
-				     	<br>
-				      <small class="font-weight-bold">STOK <?= $p['quantity'] ?></small>
+					  <small class="font-weight-bolder"><?= 'Rp ' . number_format($p['price'],0,',','.'); ?></small>
+					  <br>
+				      <small class="font-weight-bolder">stok <?= $p['quantity'] ?></small>
 				    </div>
 				    
 				</div>

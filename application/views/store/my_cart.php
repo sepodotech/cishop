@@ -116,11 +116,11 @@
 			<ul class="d-flex flex-column navbar-nav mr-auto">
 				<li class="nav-item active">
 				<small>Total Belanja dan ongkir</small>
-				
 				</li>
+<!-- problem in calculating shopping cart -->
 				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
 					Rp
-					<?= number_format($this->session->userdata('shopping'),0,',','.')?>
+					<?= $this->session->userdata('shopping');?>
 				</li>
 			</ul>
 				<a href="<?= base_url('home/checkout')?>" class="btn btn-danger btn-lg">Checkout</a>
@@ -214,7 +214,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-					<button type="submit" class="btn btn-primary">Tambah Jumlah Produk</button>
+					<button type="submit" id="edit_cart" class="btn btn-primary">Tambah Jumlah Produk</button>
 				</div>
 				</form>
 			</div>

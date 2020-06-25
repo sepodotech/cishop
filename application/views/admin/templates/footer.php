@@ -48,6 +48,9 @@
 
     <!-- custom js -->
     <script src="<?= base_url('assets/') ?>/vendor/custom/js/custom.js"></script>
+    <script type="text/javascript">
+    
+  </script>
     
   </body>
 

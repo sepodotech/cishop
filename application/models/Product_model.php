@@ -8,10 +8,51 @@ class Product_model extends CI_Model
 		return $this->db->get('product')->result_array();
 	}
 
-	public function getProductById($id)
-	{
-		return $this->db->get_where('product',['id' => $id])->row_array();
-	}
+    public function getProductById($id)
+    {
+        
+        $this->db->select('*');
+        $this->db->from('product');
+        $this->db->where('id',$id);
+        $query = $this->db->get()->result_array();
+        $data = [];
+        // query product
+        foreach ($query as $key =>$value) {
+            $data[$key] = $value;
+        }
+        // query first option
+        foreach($data as $key=>$result){
+            $this->db->select('*');
+            $this->db->from('product_option');
+            $this->db->where('SKU_parent',$result['SKU']);
+            $query2 = $this->db->get()->result_array();
+            foreach ($query2 as $key2 => $result2) {
+                $data[$key]['option1'][$key2] = $result2;
+            }
+        }
+        // query second option
+        foreach ($data as $key =>$result) {
+            foreach ($query2 as $key2 => $result2) {
+                
+                $this->db->select('*');
+                $this->db->from('product_option2');
+                $this->db->where('product_option_id',$result2['id']);
+                $query3 = $this->db->get()->result_array();
+                foreach ($query3 as $key3 => $result3) {
+                    $data[$key]['option1'][$key2]['option2'][$key3] = $result3;
+                }
+            }
+        }
+    
+        return $data[0];
+    }
+
+    public function getVariantProduct($sku) 
+    {
+        $result = $this->db->get_where('product_option' , ['SKU_parent' => $sku])->result_object();
+        $result = json_encode($result);
+        return $result;
+    }
 	public function addProduct()
 	{
 		$data = [

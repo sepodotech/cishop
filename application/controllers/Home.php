@@ -5,6 +5,7 @@ class Home extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		// $this->user = $this->User_model->getUser();
 		$this->weight = 0;
 		foreach($this->cart->contents() as $item)
 		{
@@ -21,41 +22,57 @@ class Home extends CI_Controller {
 				redirect('userAccess/admin');
 			} elseif ($this->user['role_id'] == 3 && $this->user['member_status'] == 1 ) {
 				redirect('userAccess/member');
+			} elseif ($this->user['role_id'] == 3 && $this->user['member_status'] == 0 ) {
+				$data['user'] 		= $this->user;
+				$data['product']	= $this->Product_model->getallproduct();
+				$data['title']		= 'shop';
+				$data['weight'] 	= $this->weight;
+				$test = $this->User_model->getUser();
+				// var_dump($test);
+				// die();
+			
+				$this->load->view('store/templates/header',$data);
+				$this->load->view('store/templates/topbar',$data);
+				$this->load->view('index',$data);
+				$this->load->view('store/templates/footer',$data);
 			}
 		}else {
 			$data['user'] 		= $this->user;
 			$data['product']	= $this->Product_model->getallproduct();
 			$data['title']		= 'shop';
+			$data['weight'] 	= $this->weight;
 		
 			$this->load->view('store/templates/header',$data);
 			$this->load->view('store/templates/topbar',$data);
 			$this->load->view('index',$data);
-			$this->load->view('store/templates/footer');
+			$this->load->view('store/templates/footer',$data);
 		}
-		
-		
 	}
 
-	public function singleProduct($id)
+	public function singleProduct($id = NULL, $sku = NULL)
 	{
+		
 		$data['user']			= $this->user;
-		$data['singleProduct'] 	= $this->Product_model->getProductById($id);
+		$data['product'] 		= $this->Product_model->getProductById($id);
+		$data['variants']		= $this->Product_model->getVariantProduct($sku);
 		$data['title']			= 'Detail Produk';
+		$data['weight'] 		= $this->weight;
 
 		$this->load->view('store/templates/header',$data);
 		$this->load->view('store/templates/topbar',$data);
 		$this->load->view('store/single_product',$data);
 		$this->load->view('store/templates/single_product_buttom_navbar',$data);
-		$this->load->view('store/templates/footer');
+		$this->load->view('store/templates/footer',$data);
 	}
 
-	public function myCart()
+	public function myCart($sku = NULL)
 	{
 		
 		$data['user'] 		= $this->user;
 		$data['title']		= 'Keranjang Saya';
 		$data['backArrow']	= 'home';
 		$data['getAddress']	= $this->User_model->getUserAddress();
+		$data['variants']	= $this->Product_model->getVariantProduct($sku);
 		$data['weight'] 	= $this->weight;
 		
 		$this->load->view('store/templates/header',$data);
@@ -73,7 +90,8 @@ class Home extends CI_Controller {
 			'qty'		=> htmlspecialchars($this->input->post('qty',true)),
 			'price'		=> $this->input->post('price'),
 			'image'		=> $this->input->post('image'),
-			'weight'	=> $this->input->post('weight')	
+			'weight'	=> $this->input->post('weight'),
+			'option1'	=> $this->input->post('option1'),
 		];
 		
 	$this->cart->insert($data);

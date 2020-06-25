@@ -15,7 +15,7 @@
     <div class="modal-content">
       
             <div class="modal-header">
-              <h5 class="modal-title text-uppercase font-weight-bold"><?= $singleProduct['name']; ?>
+              <h5 class="modal-title text-uppercase font-weight-bold"><?= $product['name']; ?>
               </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -23,18 +23,19 @@
             </div>
             <div class="modal-body">
             <p class="justify-content-left text-capitalize">
-            <?= 'harga : '.'Rp ' . $singleProduct['price']; ?>
+            <?= 'harga : '.'Rp ' . $product['price']; ?>
                   
             </p>
 
             <form action="<?= base_url('home/addCart'); ?>" method="post">
-                  <input type="hidden" name="id" value="<?= $singleProduct['id']; ?>">
-                  <input type="hidden" id="name" name="name" value="<?= $singleProduct['name']; ?>">
+                  <input type="hidden" name="id" value="<?= $product['id']; ?>">
+                  <input type="hidden" id="name" name="name" value="<?= $product['name']; ?>">
                   <label for="qty">Quantity : </label>
                   <input type="number" class="" id="qty" name="qty" value="1">
-                  <input type="hidden" id="price" name="price" value="<?= $singleProduct['price']; ?>">
-                  <input type="hidden" id="image" name="image" value="<?= $singleProduct['image']; ?>">
-                  <input type="hidden" id="weight" name="weight" value="<?= $singleProduct['weight']; ?>">
+                  <input type="hidden" id="price" name="price" value="<?= $product['price']; ?>">
+                  <input type="hidden" id="image" name="image" value="<?= $product['image']; ?>">
+                  <input type="hidden" id="weight" name="weight" value="<?= $product['weight']; ?>">
+                  <input type="hidden" id="option1" name="option1" value="">
               
             </div>
             <div class="modal-footer">

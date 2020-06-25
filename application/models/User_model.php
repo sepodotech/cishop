@@ -8,17 +8,27 @@ class User_model extends CI_Model
 		return $this->db->get('user')->result_array();
 	}
 
-	public function getUserAddress()
+	public function getUser()
 	{
-		return $this->db->get('user_address')->result_array();
-	}
+		$this->db->select('*');
+		$this->db->from('user');
+		$this->db->where(['email' => $this->session->userdata('email')]);
+		$query = $this->db->get()->row_array();
+		$data = [];
+		foreach ($query as $key =>$value) {
+			$data[$key] = $value;
+		}
+		foreach($data as $key=>$result){
+            $this->db->select('*');
+            $this->db->from('user_address');
+            $this->db->where('user_id',$data['id']);
+			$query2 = $this->db->get()->row_array();
+            foreach ($query2 as $key2 => $result2) {
+                $data['address'][$key2] = $result2;
+            }
+        }
+		return $data;
 
-	public function joinUserAddress()
-	{
-		$this->db->select('user.*, user_address.*')
-						->from('user')
-						 ->join('user_address','user.id = user_address.user_id');
-		$query = $this->db->get();
-		return $query->result();
+
 	}
 }
