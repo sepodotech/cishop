@@ -4,8 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Home extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		$this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-		// $this->user = $this->User_model->getUser();
+		$this->user = $this->User_model->getUserSession();
 		$this->weight = 0;
 		foreach($this->cart->contents() as $item)
 		{
@@ -27,10 +26,7 @@ class Home extends CI_Controller {
 				$data['product']	= $this->Product_model->getallproduct();
 				$data['title']		= 'shop';
 				$data['weight'] 	= $this->weight;
-				$test = $this->User_model->getUser();
-				// var_dump($test);
-				// die();
-			
+				
 				$this->load->view('store/templates/header',$data);
 				$this->load->view('store/templates/topbar',$data);
 				$this->load->view('index',$data);
@@ -41,7 +37,8 @@ class Home extends CI_Controller {
 			$data['product']	= $this->Product_model->getallproduct();
 			$data['title']		= 'shop';
 			$data['weight'] 	= $this->weight;
-		
+			
+	
 			$this->load->view('store/templates/header',$data);
 			$this->load->view('store/templates/topbar',$data);
 			$this->load->view('index',$data);
@@ -49,12 +46,10 @@ class Home extends CI_Controller {
 		}
 	}
 
-	public function singleProduct($id = NULL, $sku = NULL)
+	public function singleProduct($id = NULL)
 	{
-		
 		$data['user']			= $this->user;
 		$data['product'] 		= $this->Product_model->getProductById($id);
-		$data['variants']		= $this->Product_model->getVariantProduct($sku);
 		$data['title']			= 'Detail Produk';
 		$data['weight'] 		= $this->weight;
 
@@ -65,25 +60,21 @@ class Home extends CI_Controller {
 		$this->load->view('store/templates/footer',$data);
 	}
 
-	public function myCart($sku = NULL)
+	public function myCart()
 	{
-		
 		$data['user'] 		= $this->user;
 		$data['title']		= 'Keranjang Saya';
 		$data['backArrow']	= 'home';
-		$data['getAddress']	= $this->User_model->getUserAddress();
-		$data['variants']	= $this->Product_model->getVariantProduct($sku);
 		$data['weight'] 	= $this->weight;
 		
 		$this->load->view('store/templates/header',$data);
-		$this->load->view('store/templates/order_topbar',$data);
+		$this->load->view('store/templates/simple_topbar',$data);
 		$this->load->view('store/my_cart',$data);
 		$this->load->view('store/templates/footer',$data);
 	}
 
 	public function addCart()
 	{
-		
 		$data = [
 			'id'		=> $this->input->post('id'),
 			'name'		=> $this->input->post('name'),
@@ -95,7 +86,6 @@ class Home extends CI_Controller {
 		];
 		
 	$this->cart->insert($data);
-	
 	redirect('home/index');
 	}
 
@@ -115,16 +105,6 @@ class Home extends CI_Controller {
 		redirect('home/myCart');
 	}
 
-	public function setting()
-	{
-		$data['user'] 		= $this->user;
-		$data['title']		= 'Setting';
-
-		$this->load->view('store/templates/header',$data);
-		$this->load->view('store/setting',$data);
-		$this->load->view('store/templates/footer');
-	}
-
 	public function checkout()
 	{
 		$data['user'] 		= $this->user;
@@ -133,7 +113,7 @@ class Home extends CI_Controller {
 		$data['button']		= 'Buat Pesanan';
 
 		$this->load->view('store/templates/header',$data);
-		$this->load->view('store/templates/order_topbar',$data);
+		$this->load->view('store/templates/simple_topbar',$data);
 		$this->load->view('store/checkout',$data);
 		$this->load->view('store/templates/footer');
 	}
@@ -177,5 +157,100 @@ class Home extends CI_Controller {
 			'detail' 				=> $this->input->post('detail-address',true),
 			'courier' 				=> $this->input->post('courier',true)
 		];
+	}
+	/*---------------view/store/setting---------------------*/
+	public function profile()
+	{
+		$data['user'] 		= $this->user;
+		$data['title']		= 'Profil';
+		$data['weight'] 	= $this->weight;
+		$data['backArrow']	= 'home';
+		
+
+		$this->form_validation->set_rules('fullname', 'Fullname', 'required', ['required' => 'harus di isi']);
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric', [
+			'required' => 'harus di isi',
+			'numeric' => 'harus nomer'
+			]);
+		$this->form_validation->set_rules('nation', 'Nation', 'required', ['required' => 'harus di isi']);
+		$this->form_validation->set_rules('subdistrict', 'Subdistrict', 'required', ['required' => 'harus di isi']);
+		$this->form_validation->set_rules('complete_address', 'Complete_address', 'required', ['required' => 'harus di isi']);
+			
+        if ($this->form_validation->run() == false){
+			$this->load->view('store/templates/header',$data);
+			$this->load->view('store/templates/simple_topbar',$data);
+			$this->load->view('store/setting/profile',$data);
+			$this->load->view('store/templates/footer',$data);
+        }else{
+            $data = [
+                'name'				=> htmlspecialchars($this->input->post('fullname',true)),
+                'user_id'         	=> $this->input->post('user_id'),
+                'phone'				=> htmlspecialchars($this->input->post('phone',true)),
+                'nation'			=> htmlspecialchars($this->input->post('nation',true)),
+				'province'			=> $this->input->post('province',true),
+				'city'				=> $this->input->post('city',true),
+				'subdistrict'		=> htmlspecialchars($this->input->post('subdistrict',true)),
+                'address_id'		=> $this->input->post('address_id'),
+                'complete_address'	=> htmlspecialchars($this->input->post('complete_address',true)),           
+			];
+			$this->db->insert('user_detail',$data);
+
+			if ($this->cart->contents()){
+				redirect('Home/myCart');
+			}else{
+				redirect('home');
+			}
+		}
+	}
+
+	public function editUserDetail(){
+		$data['user'] 		= $this->user;
+		$data['title']		= 'Edit Profil';
+		$data['weight'] 	= $this->weight;
+		$data['backArrow']	= 'home/profile';
+		
+
+		$this->form_validation->set_rules('fullname', 'Fullname', 'required', ['required' => 'harus di isi']);
+        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric', [
+			'required' => 'harus di isi',
+			'numeric' => 'harus nomer'
+			]);
+		$this->form_validation->set_rules('nation', 'Nation', 'required', ['required' => 'harus di isi']);
+		$this->form_validation->set_rules('subdistrict', 'Subdistrict', 'required', ['required' => 'harus di isi']);
+		$this->form_validation->set_rules('complete_address', 'Complete_address', 'required', ['required' => 'harus di isi']);
+			
+        if ($this->form_validation->run() == false){
+			$this->load->view('store/templates/header',$data);
+			$this->load->view('store/templates/simple_topbar',$data);
+			$this->load->view('store/setting/edit_user',$data);
+			$this->load->view('store/templates/footer',$data);
+        }else{
+			$id = $this->input->post('user-detail-id');
+			
+			$data = [
+				'user_detail_id'	=> $this->input->post('user-detail-id'),
+                'name'				=> htmlspecialchars($this->input->post('fullname',true)),
+                'user_id'         	=> $this->input->post('user_id'),
+                'phone'				=> htmlspecialchars($this->input->post('phone',true)),
+                'nation'			=> htmlspecialchars($this->input->post('nation',true)),
+				'province'			=> $this->input->post('province'),
+				'city'				=> $this->input->post('city'),
+				'subdistrict'		=> htmlspecialchars($this->input->post('subdistrict',true)),
+                'address_id'		=> $this->input->post('address_id'),
+                'complete_address'	=> htmlspecialchars($this->input->post('complete_address',true)),           
+			];
+			$this->db->where('user_detail_id', $id);
+			$this->db->update('user_detail',$data);
+
+			if ($this->cart->contents()){
+				redirect('Home/myCart');
+			}else{
+				redirect('home');
+			}
+		}
+	}
+	/*---------------getting variant product---------------------*/
+	public function getVariantProduct(){
+
 	}
 }

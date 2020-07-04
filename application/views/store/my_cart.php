@@ -1,10 +1,3 @@
-<?php
-   if($_POST){
-    $test = $_POST['mytets'];
-
-    var_dump($test);
-}
-?>
 <div class="container-fluid">
   <div class="row mb-4">
 	<div class="col-4 col-md-3 font-weight-bolder d-none d-sm-block">Produk</div>
@@ -98,96 +91,52 @@
 	<!-- check whether user has loggin or not -->
 	<?php if ($user) : ?>
 		<!-- when user logged in, check there wes address or not -->
-		<?php if ($getAddress) : ?>
-			<div class="row">
-				<div>pilih ongkir</div>
+		<?php if (array_key_exists('user_detail_id',$user)) : ?>
+		<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="dropship">
+				<label class="form-check-label" for="dropship">
+					Dropship
+				</label>
 			</div>
+			<div class="form-group">
+				<label for="courier">Pilih Jasa Kirim</label>
+				<select class="form-control courier" id="courier" name="courier">
+					<option value="jne" >JNE Reguler</option>
+					<option value="pos" >POS Kilat Khusus</option>
+				</select>
+			</div>
+			<input type="hidden" class="" name="weight" value="<?= $weight; ?>">
+			<div id="ongkir"></div>
+			<!-- buttom navbar visible only small dan medium size -->
+			<div class="d-lg-none">
+				<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+					<ul class="d-flex flex-column navbar-nav mr-auto">
+						<li class="nav-item active">
+						<small>Total Belanja dan ongkir</small>
+						
+						</li>
+						<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
+						Rp 0
+						</li>
+					</ul>
+						<input type="hidden" value="" id="total-shopping" name="total-shopping">
+						<button type="submit" class="btn btn-danger btn-lg">Checkout</button>
+				</nav>
+			</div>
+		</form>
 		<?php 	else : ?>
-			<div class="row">
-				<div>isikan alamat</div>
-				<a href="<?= base_url('home/setting') ?>" class="btn btn-primary btn-sm ml-2">klik disini</a>
+			<div class="d-lg-none">
+				<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+						<a href="<?= base_url('home/profile') ?>" type="submit" class="btn btn-secondary btn-lg ml-auto">Isi Alamat</a>
+				</nav>
 			</div>
 		<?php endif; ?>
-	<!-- user dosn't log in but there was temporary data in session -->
-	<?php elseif ($this->session->userdata('name')) : ?>
-	<!-- buttom navbar visible only small dan medium size -->
-	<div class="d-lg-none">
-		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
-			<ul class="d-flex flex-column navbar-nav mr-auto">
-				<li class="nav-item active">
-				<small>Total Belanja dan ongkir</small>
-				</li>
-<!-- problem in calculating shopping cart -->
-				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
-					Rp
-					<?= $this->session->userdata('shopping');?>
-				</li>
-			</ul>
-				<a href="<?= base_url('home/checkout')?>" class="btn btn-danger btn-lg">Checkout</a>
-		</nav>
-	</div>
 	<?php else : ?>
-	<h5>Masukkan Identitas</h5>
-	<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
-		<div class="form-group">
-			<label for="name">nama</label>
-			<input type="text" class="form-control" id="name" name="name">
-		</div>
-		<div class="form-group">
-			<label for="phone">Nomer HP</label>
-			<input type="text" class="form-control" id="phone" name="phone">
-		</div>
-		<div class="form-group">
-			<label for="destination_province">Provinsi</label>
-			<br>
-			<small class="text-success">jika belum muncul, mohon tunggu!</small>
-			<select class="destination_province form-control" id="destination_province" >
-				<option value=""> Pilih Provinsi</option>
-			</select>
-		</div>
-		<input type="hidden" class="province" name="province">
-		<div class="form-group">
-			<label for="destination_city">kabupaten/kota</label>
-			<br>
-			<small class="text-success">jika belum muncul, mohon tunggu!</small>
-			<select class="destination_city form-control" name="city" id="destination_city">
-				<option value=""> Pilih Kota</option>
-			</select>
-		</div>
-		<input type="hidden" class="city" name="city">
-		<div class="form-group">
-			<label for="subdistrict">kecamatan</label>
-			<input type="text" class="form-control" id="subdistrict" name="subdistrict">
-		</div>
-		<div class="form-group">
-			<label for="detail-address">Alamat Lebih Lengkap</label>
-			<textarea class="form-control" id="detail-address" name="detail-address" rows="4"></textarea>
-		</div>
-		<div class="form-group">
-			<label for="courier">Pilih Jasa Kirim</label>
-			<select class="form-control courier" id="courier" name="courier">
-				<option value="jne" >JNE Reguler</option>
-				<option value="pos" >POS Kilat Khusus</option>
-			</select>
-		</div>
-		<input type="hidden" class="" name="weight" value="<?= $weight; ?>">
-		<div id="ongkir"></div>
-	
 	<!-- buttom navbar visible only small dan medium size -->
 	<div class="d-lg-none">
 		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
-			<ul class="d-flex flex-column navbar-nav mr-auto">
-				<li class="nav-item active">
-				<small>Total Belanja dan ongkir</small>
-				
-				</li>
-				<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
-				Rp 0
-				</li>
-			</ul>
-				<input type="hidden" value="" id="total-shopping" name="total-shopping">
-				<button type="submit" class="btn btn-danger btn-lg">Checkout</button>
-	</form>
+				<a href="<?= base_url('auth/registration') ?>" type="submit" class="btn btn-secondary btn-lg ml-auto">Registrasi</a>
 		</nav>
 	</div>
 	<?php endif; ?>		

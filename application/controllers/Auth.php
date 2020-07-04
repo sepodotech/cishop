@@ -27,7 +27,6 @@ class Auth extends CI_Controller {
 			//-- when validation success
            $this->_login();
 		}
-		
 	}
 
 	private function _login()
@@ -36,9 +35,8 @@ class Auth extends CI_Controller {
         $password   = htmlspecialchars($this->input->post('password',true));
 
         //query data from database
-        $user = $this->db->get_where('user', ['email' => $email])->row_array();
-
-
+		$user = $this->db->get_where('user', ['email' => $email])->row_array();
+		
         //--when user axist
         if($user)
         {
@@ -48,20 +46,15 @@ class Auth extends CI_Controller {
                 //--ceck password
                 if(password_verify($password, $user['password']))
                 {
-                    
                     //--store data for session
-
                     $data = [
                         'email'     		=> $user['email'],
                         'role_id'   		=> $user['role_id'],
                         'member_status'     => $user['member_status']
                     ];
-
 					$this->session->set_userdata($data);
-					
-				
+
                     //--redirect user;
-                    
                     if($user['role_id'] == 1 ) {
                             redirect('userAccess/ceo');
                         } elseif ($user['role_id'] == 2 ) {
@@ -71,8 +64,6 @@ class Auth extends CI_Controller {
                         }else {
                             redirect('home/index');
                         }
-                        
-                    
                 }else
                 {
                     $this->session->set_flashdata('message','<div class="alert alert-danger" role="alert">password salah!</div>');

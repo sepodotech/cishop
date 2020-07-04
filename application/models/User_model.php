@@ -3,32 +3,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User_model extends CI_Model
 {
-	public function getAllUser()
+	public function getUserSession()
 	{
-		return $this->db->get('user')->result_array();
-	}
+		$this->db->select('id');
+		$test = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-	public function getUser()
-	{
-		$this->db->select('*');
-		$this->db->from('user');
-		$this->db->where(['email' => $this->session->userdata('email')]);
-		$query = $this->db->get()->row_array();
-		$data = [];
-		foreach ($query as $key =>$value) {
-			$data[$key] = $value;
+		$this->db->select('user_id');
+		$test2 = $this->db->get('user_detail')->result_array();
+
+		$a = [];
+		foreach($test2 as $key =>$value ){
+			$a[$key] = $value['user_id'];
 		}
-		foreach($data as $key=>$result){
-            $this->db->select('*');
-            $this->db->from('user_address');
-            $this->db->where('user_id',$data['id']);
-			$query2 = $this->db->get()->row_array();
-            foreach ($query2 as $key2 => $result2) {
-                $data['address'][$key2] = $result2;
-            }
-        }
-		return $data;
 
+		 if ($test == NULL){
+			$test['id'] = "0";
+		 }
 
+		if (in_array($test['id'],$a)){
+			$this->db->select('user.* , user_detail.*');
+			$this->db->from('user');
+			$this->db->join('user_detail', 'user.id = user_detail.user_id', 'left');
+			$this->db->where(['email' => $this->session->userdata('email')]);
+			return $this->db->get()->row_array();
+		}else{
+			return $user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		}
 	}
+
+	
 }

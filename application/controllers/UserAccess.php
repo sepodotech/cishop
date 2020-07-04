@@ -5,7 +5,8 @@ class UserAccess extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		// $this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+		$this->user = $this->User_model->getUserSession();
 	}
 
 	public function member()
@@ -34,7 +35,7 @@ class UserAccess extends CI_Controller {
 	{
 		$data['title'] 	= 'Dashboard';
 		$data['user'] 	= $this->user;
-
+		
 		$this->load->view('admin/templates/header', $data);
 		$this->load->view('admin/templates/sidebar', $data);
 		$this->load->view('admin/templates/topbar', $data);

@@ -5,8 +5,35 @@ class Product_model extends CI_Model
 {
 	public function getAllProduct()
 	{
-		return $this->db->get('product')->result_array();
-	}
+        $this->db->select('*');
+        $this->db->from('product');
+        $query = $this->db->get()->result_array();
+        $data = [];
+        foreach ($query as $key =>$value) {
+            $data[$key] = $value;
+        }
+        foreach($data as $key=>$result){
+            $this->db->select('*');
+            $this->db->from('product_option');
+            $this->db->where('SKU_parent',$result['SKU']);
+            $query2 = $this->db->get()->result_array();
+            foreach ($query2 as $key2 => $result2) {
+                $data[$key]['option1'][$key2] = $result2;
+            }
+        }
+            foreach ($data as $key2 => $result2) {
+                $this->db->select('*');
+                $this->db->from('product_option2');
+                $this->db->where('product_option_id',$result2['id']);
+                $query3 = $this->db->get()->result_array();
+                foreach ($query3 as $key3 => $result3) {
+                    $data[$key]['option1'][$key2]['option2'][$key3] = $result3;
+                }
+            }
+        return $data;
+    }
+        
+	
 
     public function getProductById($id)
     {
