@@ -5,12 +5,28 @@ class UserAccess extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		// $this->user = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		$this->user = $this->User_model->getUserSession();
+		$this->weight = 0;
+		foreach($this->cart->contents() as $item)
+		{
+		$this->weight += $item['weight']*$item['qty'];
+		}
 	}
 
-	public function member()
+	public function member(){
+		$data['title']		= 'shop';
+		$data['user'] 		= $this->user;
+		$data['product']	= $this->Product_model->getallproduct();
+		$data['weight'] 	= $this->weight;
+		
+		$this->load->view('store/templates/header',$data);
+		$this->load->view('store/templates/topbar',$data);
+		$this->load->view('index',$data);
+		$this->load->view('store/templates/footer',$data);
+	}
+	public function reseller()
 	{
+		$data['title'] 	= 'Mitra';
 		$data['user'] = $this->user;
 
 		$this->load->view('admin/templates/header', $data);

@@ -1,4 +1,3 @@
-
 <div class="container-fluid mt-2">
 	<!-- banner carousel -->
 	<div class="row">
@@ -35,7 +34,7 @@
 	<div class="row mt-2">
 		<?php foreach ($product as $p) : ?>
 		<div class="col-6 col-md-4 col-lg-2">
-			<a class="text-dark text-decoration-none" href="<?= base_url('home/singleProduct/') . $p['id'] . '/' . $p['SKU']; ?>">
+			<a class="text-dark text-decoration-none" href="<?= base_url('home/singleProduct/') . $p['id']; ?>">
 				<div class="card border-3 shadow-lg my-1">
 					
 				    <img src="<?= base_url('assets/upload/products/') . $p['image']; ?>" class="card-img-top" alt="...">
@@ -53,3 +52,10 @@
 		<?php endforeach; ?>
 	</div>
 </div>
+
+
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>

@@ -2,16 +2,13 @@
       <footer class="sticky-footer font-weight-bolder">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; SEPODO 2019-<?= date('Y'); ?></span>
+            <span>Copyright &copy; SEPODO <?= date('Y'); ?></span>
           </div>
         </div>
       </footer>
       <!-- End of copyright -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+  
   
   
   <!-- Logout Modal-->
@@ -52,6 +49,47 @@
     
 <script type="text/javascript">
 	$(document).ready(function (){
+		// separate thousand with dot
+		function formatNumber(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+		}
+
+		// funtion to get data province
+		function Province() {
+			$.getJSON("<?= base_url('Shipping/province') ?>", function(data){
+				$.each(data, function(i, opt) {
+					$('.user-province').append('<option value="'+opt.province_id+'">'+opt.province+ '</option>')
+				});
+			});
+		}
+		Province();
+
+		// funtion to get city
+		function city(idprov){
+			$.getJSON("<?= base_url('shipping/city/') ?>"+idprov, function(data){
+				$.each(data, function(i, opt) {
+					$('.user-city').append('<option value="'+opt.city_id+'">'+opt.type+' '+opt.city_name+'</option>')
+				});
+			});
+		}
+
+		// function to get cost
+		function cost(origin,dest,weight,courier) {
+			let totalBarang = <?= $this->cart->total(); ?>;
+			$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
+				
+				let shippingCost = formatNumber(data);
+				let biayaOngkir = `<P>biaya ongkirnya Rp `+shippingCost+`</P>`;
+				$("#ongkir").html(biayaOngkir);
+
+				let totalShoppig;
+				totalShoppig = parseInt(data)+totalBarang;
+				totalShoppig = formatNumber(totalShoppig);
+				$("#totalShopping").text("Rp "+totalShoppig);
+				$("#total-shopping").val(totalShoppig);
+			});
+		}
+
 		// function to get address
 		function getUserAddress(){
 			let addressId;
@@ -61,124 +99,136 @@
 				return addressId = <?= json_encode($user); ?>.address_id;
 			}
 		}
+		
 		// create global variable for get user address id
 		let userAddressId = getUserAddress();
 
-	/*-------------start script for profile info--------------*/
-	/*-------------end script for profile info--------------*/
+		function getVariantProduct(optionId){
+			$.getJSON("<?= base_url('product/getVariantProduct/') ?>"+optionId, function(data){
+				let stock = data.option_stock;
+				stock = `<p class="text-uppercase"> stok `+stock+`</p>`;
+				$(".stock").html(stock);
+			});
+		}
+		
+	/*-------------start profile page--------------*/
+		$(".user-province").on("change", function(e){
+				e.preventDefault();
+				let option = $('option:selected', this).val();
+				let userProvince = $('option:selected', this).text();
+				$('.user-city option:gt(0)').remove();
+				$('.province').val(userProvince);
+				city(option);
+			});
+			$(".user-city").on("change", function(e){
+				e.preventDefault();
+				let city = $('option:selected', this).val();
+				let userCity = $('option:selected', this).text();
+				$('#address_id').val(city);
+				$('.city').val(userCity);
+			});
+	/*-------------end profile page--------------*/
+
 	/*-------------start script for single product info--------------*/
-		let element_variant = '0';
-		$(".option1").click(function(data){
-			data.preventDefault();
-			let product_id = $(this).val();
-			let stock = element_variant.filter(x => x.id == product_id).map(x => x.option_stok);
-			stock = stock.toString();
-			stock = `<p class="text-uppercase"> stok `+stock+`</p>`;
-			$(".stock").html(stock);
+		$(".option1").click(function(e){
+			e.preventDefault();
+			let optionId = $(this).val();
+			getVariantProduct(optionId);
 
 			let product_option = $(this).text();
 			$("#option1").val(product_option);
 		})
 	/*-------------end script for single product info--------------*/
 
-
-	
-		// funtion to get data province
-		function Province() {
-			$.getJSON("<?= base_url('Shipping/province') ?>", function(data){
-				$.each(data, function(i, opt) {
-					$('.user-province').append('<option value="'+opt.province_id+'">'+opt.province+ '</option>')
-				});
-			});
-		}
-
-		Province();
-		// funtion to get city
-		function city(idprov){
-			$.getJSON("<?= base_url('shipping/city/') ?>"+idprov, function(data){
-				$.each(data, function(i, opt) {
-					$('.user-city').append('<option value="'+opt.city_id+'">'+opt.type+' '+opt.city_name+'</option>')
-				});
-			});
-		}
-		// function to get cost
-		function cost(origin,dest,weight,courier) {
-			let totalBarang = <?= $this->cart->total(); ?>;
-			let biayaOngkir;
-			$.getJSON("<?= base_url('shipping/cost/') ?>"+origin+"/"+dest+"/"+weight+"/"+courier, function(data){     
-				
-				biayaOngkir += `<P>biaya ongkir anda `+data+`</P>`;
-				$("#ongkir").html(biayaOngkir);
-
-				let totalShoppig = parseInt(data)+totalBarang;
-				$("#totalShopping").text("Rp "+totalShoppig);
-				$("#total-shopping").val(totalShoppig);
-			});
-		}
-
-		$(".user-province").on("change", function(e){
-			e.preventDefault();
-			let option = $('option:selected', this).val();
-			let userProvince = $('option:selected', this).text();
-			$('.user-city option:gt(0)').remove();
-			$('.province').val(userProvince);
-			city(option);
-		});
-		$(".user-city").on("change", function(e){
-			e.preventDefault();
-			let city = $('option:selected', this).val();
-			let userCity = $('option:selected', this).text();
-			$('#address_id').val(city);
-			$('.city').val(userCity);
-		});
-
-		/*-------------start script page my cart for shipping--------------*/
-		
-		$(".destination_province").on("change", function(data){
-			data.preventDefault();
-			var provi = $('option:selected', this).text();
-			$('.province').val(provi);
-		});
-
-		$(".destination_province").on("change", function(e){
-			e.preventDefault();
-			var option = $('option:selected', this).val();
-			$('.destination_city option:gt(0)').remove();
-			$('.courier').val('');
-			city(option);
-		
-		});
-
-		$(".destination_city").on("change", function(data){
-			data.preventDefault();
-			var city = $('option:selected', this).text();
-			$('.city').val(city);
-		});
-		
-		$(".destination_city").on("change", function(e){
-			e.preventDefault();
-			var option = $('option:selected', this).val();
-			$('.courier').val('');
-		});
-
-	
-		
+	/*-------------start script page my cart for shipping--------------*/
 		$(".courier").on("change", function(e){
 			e.preventDefault();
 			let courier = $('option:selected', this).val();
-			let origin = userAddressId;
-			let dest = $(".destination_city").val();
+			let origin = '149';
+			let dest = userAddressId;
 			let weight = <?php echo $weight; ?>;
 			cost(origin,dest,weight,courier);
 		});
 
-		
+		// if 
+		// for checkbox dropship
+		$('#dropshipping').hide();
+		$('#dropship').on('click', function(){
+			if ( $(this).prop('checked') ) {
+				$('#dropshipping').fadeIn();
+				$('#totalShopping').text('Rp 0');
+				$(".user-province").on("change", function(e){
+					e.preventDefault();
+					let provId = $('option:selected', this).val();
+					let prov = $('option:selected', this).text();
+					$('.user-city option:gt(0)').remove();
+					$('.province').val(prov);
+					$('.courier').val('');
+					console.log(provId);
+					city(provId);
+				});
+
+				$(".user-city").on("change", function(e){
+					e.preventDefault();
+					var option = $('option:selected', this).val();
+					let city = $('option:selected', this).text();
+					$('.city').val(city);
+					$('.courier').val('');
+				});
+				$(".courier").on("change", function(e){
+					e.preventDefault();
+					let courier = $('option:selected', this).val();
+					let origin = '149';
+					let dest = $(".user-city").val();
+					let weight = <?php echo $weight; ?>;
+					cost(origin,dest,weight,courier);
+				});
+			} 
+			else {
+				$('#dropshipping').hide();
+				$('#totalShopping').text('Rp 0');
+				$('#ongkir').html('');
+				$('#dropship-name').val('');
+				$('#dropship-phone').val('');
+				$('#dropship-nation').val('');
+				$('#dropship-province').val('');
+				$('#dropship-city').val('');
+				$('.dropship-province').val('');
+				$('.dropship-city').val('');
+				$('#subdistrict').val('');
+				$('#complite_address').val('');
+				$(".courier").on("change", function(e){
+					e.preventDefault();
+					let courier = $('option:selected', this).val();
+					let origin = '149';
+					let dest = userAddressId;
+					let weight = <?php echo $weight; ?>;
+					cost(origin,dest,weight,courier);
+				});
+			}
+		});
 		
 
-		
+		let $loading = $('.loading').hide();
+		$('.btn-loading').hide();
+		$(document)
+		.ajaxStart(function () {
+			$('#totalShopping').hide();
+			$('.btn-checkout').hide();
+			$('#dropship-city').hide();
+			$('#ongkir').hide();
+			$loading.show();
+			$('.btn-loading').show();
+		})
+		.ajaxStop(function () {
+			$('.btn-loading').hide();
+			$loading.hide();
+			$('#totalShopping').show();
+			$('.btn-checkout').show();
+			$('#dropship-city').show();
+			$('#ongkir').show();
+		});
 	/*-------------end script page my_cart shipping--------------*/
-
-
 
 	});
 </script>

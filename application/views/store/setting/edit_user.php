@@ -46,6 +46,6 @@
         <textarea type="text" name="complete_address" class="form-control" id="complete_address" value=""><?= $user['complete_address']; ?></textarea>
         <?= form_error('complete_address', '<small class="text-danger">', '</small>'); ?>
     </div>
-    <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+    <button type="submit" class="btn btn-sm btn-primary float-right">Simpan</button>
 </form>
 </div>

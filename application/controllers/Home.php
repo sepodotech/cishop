@@ -20,17 +20,9 @@ class Home extends CI_Controller {
 			} elseif ($this->user['role_id'] == 2 ) {
 				redirect('userAccess/admin');
 			} elseif ($this->user['role_id'] == 3 && $this->user['member_status'] == 1 ) {
-				redirect('userAccess/member');
+				redirect('userAccess/reseller');
 			} elseif ($this->user['role_id'] == 3 && $this->user['member_status'] == 0 ) {
-				$data['user'] 		= $this->user;
-				$data['product']	= $this->Product_model->getallproduct();
-				$data['title']		= 'shop';
-				$data['weight'] 	= $this->weight;
-				
-				$this->load->view('store/templates/header',$data);
-				$this->load->view('store/templates/topbar',$data);
-				$this->load->view('index',$data);
-				$this->load->view('store/templates/footer',$data);
+				redirect('userAccess/member');
 			}
 		}else {
 			$data['user'] 		= $this->user;
@@ -46,10 +38,11 @@ class Home extends CI_Controller {
 		}
 	}
 
-	public function singleProduct($id = NULL)
+	public function singleProduct($id)
 	{
 		$data['user']			= $this->user;
 		$data['product'] 		= $this->Product_model->getProductById($id);
+		$data['variants']		= $this->Product_model->getVariantProduct($id);
 		$data['title']			= 'Detail Produk';
 		$data['weight'] 		= $this->weight;
 

@@ -12,15 +12,18 @@ class Product_model extends CI_Model
         foreach ($query as $key =>$value) {
             $data[$key] = $value;
         }
+
         foreach($data as $key=>$result){
             $this->db->select('*');
             $this->db->from('product_option');
-            $this->db->where('SKU_parent',$result['SKU']);
+            $this->db->where('product_id',$result['id']);
             $query2 = $this->db->get()->result_array();
             foreach ($query2 as $key2 => $result2) {
                 $data[$key]['option1'][$key2] = $result2;
             }
         }
+
+        foreach ($data as $key =>$result) {
             foreach ($data as $key2 => $result2) {
                 $this->db->select('*');
                 $this->db->from('product_option2');
@@ -30,14 +33,12 @@ class Product_model extends CI_Model
                     $data[$key]['option1'][$key2]['option2'][$key3] = $result3;
                 }
             }
+        }
         return $data;
     }
-        
-	
 
     public function getProductById($id)
     {
-        
         $this->db->select('*');
         $this->db->from('product');
         $this->db->where('id',$id);
@@ -51,7 +52,7 @@ class Product_model extends CI_Model
         foreach($data as $key=>$result){
             $this->db->select('*');
             $this->db->from('product_option');
-            $this->db->where('SKU_parent',$result['SKU']);
+            $this->db->where('product_id',$result['id']);
             $query2 = $this->db->get()->result_array();
             foreach ($query2 as $key2 => $result2) {
                 $data[$key]['option1'][$key2] = $result2;
@@ -70,14 +71,12 @@ class Product_model extends CI_Model
                 }
             }
         }
-    
         return $data[0];
     }
 
-    public function getVariantProduct($sku) 
+    public function getVariantProduct($id) 
     {
-        $result = $this->db->get_where('product_option' , ['SKU_parent' => $sku])->result_object();
-        $result = json_encode($result);
+        $result = $this->db->get_where('product_option' , ['id' => $id])->row_array();
         return $result;
     }
 	public function addProduct()

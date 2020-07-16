@@ -23,7 +23,7 @@
                 </div>
                 <p class="text-uppercase font-weight-bolder"><?= $product['option1'][0]['option_name']; ?></p>
                 <?php foreach($product['option1'] as $key => $result) : ?>
-                    <button class=" option1 btn btn-sm btn-outline-secondary text-uppercase mr-2" value="<?= $result['id']; ?>"><?= $result['option_value']; ?></button>
+                    <button class="option1 btn btn-sm btn-outline-secondary text-uppercase mr-2" value="<?= $result['id']; ?>"><?= $result['option_value']; ?></button>
                 <?php endforeach; ?>
             <?php endif; ?>
             <hr id="detile-product">
