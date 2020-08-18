@@ -60,9 +60,27 @@ $totalshopping = intval($this->session->userdata("shopping"));
 	</div>
 	<?php endforeach; ?>
 	<hr>
-	<p>Ingin merubah alamat Pengiriman?</p>
-			<a href="<?= base_url('home/deleteTempAddress'); ?>" class="btn btn-danger">Hapus alamat</a>
-		
+	<?php if($this->session->userdata('drop_name')) : ?>
+		<div class="card border-danger text-center mb-5">
+			<div class="card-header alert-warning">
+				<h4>DROPSHIP</h4>
+			</div>
+			<div class="card-body">
+				<p class="card-text text-left">apakah kamu yakin kirim barang ke <?= $this->session->userdata('drop_name'); ?> alamat <?= $this->session->userdata('drop_detail'); ?>, alamat <?= $this->session->userdata('drop_subdistrict'); ?>, <?= $this->session->userdata('drop_city'); ?>, <?= $this->session->userdata('drop_province'); ?></p>
+				<p class="text-left font-weight-bold">Jika ingin merubah klik dibawah ini</p>
+			</div>
+			<div class="card-footer alert-danger">
+				<a href="<?= base_url('home/deleteTempData'); ?>">
+					<div class="row justify-content-center">
+						<h5 class="text-danger"> Hapus dropship</h5>
+						<i class="fas fa-trash-alt fa-lg text-danger ml-3 mt-1"></i>
+					</div>
+				</a>
+			</div>
+		</div>
+		<br>
+	<?php endif; ?>
+	
 	<div class="d-lg-none">
 		<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
 		    <ul class="d-flex flex-column navbar-nav mr-auto">
@@ -74,22 +92,7 @@ $totalshopping = intval($this->session->userdata("shopping"));
 		        Rp <?= number_format($totalshopping,0,',','.'); ?>
 		      </li>
 		    </ul>
-		    <form class="form-inline my-2 my-lg-0" method="post" action="<?= base_url('home/payment') ?>">
-		      <?php foreach ($this->cart->contents() as $items): ?>
-		      <input type="hidden" name="product-name" value="<?= $items['name']; ?>">
-	          <input type="hidden" name="qty" value="<?= $items['qty']; ?>">
-	          <?php endforeach; ?>
-		      <input type="hidden" name="total-shopping" value="<?= $totalshopping;?>">
-			  <input type="hidden" name="buyer-name" value="<?= $this->session->userdata('name');?>">
-			  <input type="hidden" name="phone" value="<?= $this->session->userdata('phone');?>">
-			  <input type="hidden" name="province" value="<?= $this->session->userdata('province');?>">
-			  <input type="hidden" name="city" value="<?= $this->session->userdata('city');?>">
-			  <input type="hidden" name="subdistrict" value="<?= $this->session->userdata('subdistrict');?>">
-			  <input type="hidden" name="detail" value="<?= $this->session->userdata('detail');?>">
-			  <input type="hidden" name="courier" value="<?= $this->session->userdata('courier');?>">
-		      <button type="button" class="btn btn-danger btn-lg">Buat Pesanan</button>
-		    </form>
-		  
+			<a href="<?= base_url('home/productOrder') ?>" class="btn btn-danger btn-lg my-2">Buat Pesanan</a>
 		</nav>
 	</div>  
 		<!-- edit tempdata -->

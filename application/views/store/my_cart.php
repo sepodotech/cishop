@@ -1,3 +1,6 @@
+<?php 
+// var_dump($this->session->userdata())
+?>
 <div class="container-fluid">
   <div class="row mb-4">
 	<div class="col-4 col-md-3 font-weight-bolder d-none d-sm-block">Produk</div>
@@ -96,87 +99,161 @@
 				<input class="form-check-input" type="checkbox" id="dropship">
 				<label class="form-check-label" for="dropship">Dropship</label>
 			</div>
-		<form action="<?= base_url('home/addTempAddress'); ?>" method="post">
+			<!-- if checkbox #dropship is clicked -->
 			<div id="dropshipping">
-				<div class="form-group">
-					<label for="dropship-name">Nama</label>
-					<input type="text" class="form-control" id="dropship-name" name="dropship-name">
-				</div>
-				<div class="form-group">
-					<label for="dropship-phone">No HP</label>
-					<input type="text" class="form-control" id="dropship-phone" name="dropship-phone">
-				</div>
-				<div class="form-group">
-					<label for="dropship-nation">Negara</label>
-					<input type="text" class="form-control" id="dropship-nation" name="dropship-nation">
-				</div>
-				<div class="form-group">
-					<label for="province">Provinsi :</label>
-					<br>
-					<small class="text-success">jika belum muncul, mohon tunggu!</small>
-					<select class="user-province form-control" id="dropship-province">
-						<option value=""> Pilih Provinsi</option>
-					</select>
-            	</div>
-				<input type="hidden" name="province" class="dropship-province">
-				<div class="form-group">
-					<label for="city">Kab/Kota :</label>
-					<br>
+				<form action="<?= base_url('home/addTempData'); ?>" method="post" class="tempData">
+						<div class="form-group">
+							<label for="dropship-name">Nama</label>
+							<input type="text" class="form-control" id="dropship-name" name="dropship-name" required>
+							<?= form_error('dropship-name', '<small class="text-danger">', '</small>'); ?>
+						</div>
+						<div class="form-group">
+							<label for="dropship-phone">No HP</label>
+							<input type="text" class="form-control" id="dropship-phone" name="dropship-phone" required>
+							<?= form_error('dropship-phone', '<small class="text-danger">', '</small>'); ?>
+						</div>
+						<div class="form-group">
+							<label for="dropship-nation">Negara</label>
+							<input type="text" class="form-control" id="dropship-nation" name="dropship-nation" required>
+							<?= form_error('dropship-nation', '<small class="text-danger">', '</small>'); ?>
+						</div>
+						<div class="form-group">
+							<label for="dropship-province">Provinsi :</label>
+							<br>
+							<small class="text-success">jika belum muncul, mohon tunggu!</small>
+							<select class="user-province form-control" id="dropship-province">
+								<option value=""> Pilih Provinsi</option>
+							</select>
+						</div>
+						<input type="hidden" name="dropship-province" id="drop-province">
+						<div class="form-group">
+							<label for="city">Kab/Kota :</label>
+							<br>
+							<li class="spinner-border text-info loading" role="status">
+								<span class="sr-only">Loading...</span>
+							</li>
+							<select class="user-city form-control" id="dropship-city">
+								<option value=""> Pilih Kab/Kota</option>
+							</select>
+						</div>
+						<input type="hidden" name="dropship-city" id="drop-city">
+						<div class="form-group">
+							<label for="subdistrict">Kecamatan :</label>
+							<input type="text" name="dropship-subdistrict" class="form-control" id="subdistrict" required>
+							<?= form_error('dropship-subdistrict', '<small class="text-danger">', '</small>'); ?>
+						</div>
+						<div class="form-group">
+							<label for="complite_address">Alamat Lengkap :</label>
+							<textarea type="text" name="dropship-complite-address" class="form-control" id="complite_address" required></textarea>
+							<?= form_error('dropship-complite-address', '<small class="text-danger">', '</small>'); ?>
+						</div>
+
+					<div class="form-group">
+						<label for="courier">Pilih Jasa Kirim</label>
+						<select class="form-control courier" id="courier" name="courier">
+							<option value="" >Pilih Ongkir</option>	
+							<option value="jne" >JNE Reguler</option>
+							<option value="pos" >POS Kilat Khusus</option>
+						</select>
+					</div>
+					<input type="hidden" name="weight" value="<?= $weight; ?>">
+					<!-- loading animation -->
 					<li class="spinner-border text-info loading" role="status">
 						<span class="sr-only">Loading...</span>
 					</li>
-					<select class="user-city form-control" id="dropship-city">
-						<option value=""> Pilih Kab/Kota</option>
-					</select>
-				</div>
-				<input type="hidden" name="city" class="dropship-city">
-				<div class="form-group">
-					<label for="subdistrict">Kecamatan :</label>
-					<input type="text" name="subdistrict" class="form-control" id="subdistrict">
-					<?= form_error('subdistrict', '<small class="text-danger">', '</small>'); ?>
-				</div>
-				<div class="form-group">
-					<label for="complite_address">Alamat Lengkap :</label>
-					<textarea type="text" name="complete_address" class="form-control" id="complite_address"></textarea>
-					<?= form_error('complete_address', '<small class="text-danger">', '</small>'); ?>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="courier">Pilih Jasa Kirim</label>
-				<select class="form-control courier" id="courier" name="courier">
-					<option value="" >Pilih Ongkir</option>	
-					<option value="jne" >JNE Reguler</option>
-					<option value="pos" >POS Kilat Khusus</option>
-				</select>
-			</div>
-			<input type="hidden" name="weight" value="<?= $weight; ?>">
-			<li class="spinner-border text-info loading" role="status">
-				<span class="sr-only">Loading...</span>
-			</li>
-			<div id="ongkir"></div>
-			<!-- buttom navbar visible only small dan medium size -->
-			<div class="d-lg-none">
-				<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
-					<ul class="d-flex flex-column navbar-nav mr-auto">
-						<li class="nav-item active">
-						<small>Total Belanja dan ongkir</small>
-						<li class="spinner-border text-info loading" role="status">
-							<span class="sr-only">Loading...</span>
-						</li>
-						</li>
-						<li class="nav-item font-weight-bolder text-danger h5" id="totalShopping">
-						Rp 0
-						</li>
-					</ul>
-						<input type="hidden" value="" id="total-shopping" name="total-shopping">
-						<button type="submit" class="btn btn-danger btn-lg btn-checkout">Checkout</button>
-						<button class="btn btn-danger btn-lg btn-loading" type="button" disabled>
-							<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-							Loading...
+					<div class="Ongkir"></div>
+					<!-- alert shopping cart empty -->
+					<div class="alert alert-danger alert-dismissible fade show alertShoppingEmpty" role="alert" >
+						<strong>CHECKOUT GAGAL!</strong> Mohon isi keranjang belanja
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
 						</button>
-				</nav>
+					</div>
+					<!-- alert shopping cart empty -->
+					<div class="alert alert-danger alert-dismissible fade show alertunselectedcourier" role="alert" >
+						<strong>CHECKOUT GAGAL!</strong> Mohon pilih kurir
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- buttom navbar visible only small dan medium size -->
+					<div class="d-lg-none">
+						<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+							<ul class="d-flex flex-column navbar-nav mr-auto">
+								<li class="nav-item active">
+								<small>Total Belanja dan ongkir</small>
+								<!-- loading animation -->
+								<li class="spinner-border text-info loading" role="status">
+									<span class="sr-only">Loading...</span>
+								</li>
+								<li class="nav-item font-weight-bolder text-danger h5 totalShopping" value="0">Rp 0</li>
+							</ul>
+							<input type="hidden" value="" class="Total-Shopping" name="total-shopping">
+							<button type="submit" class="btn btn-danger btn-lg btn-checkout">Checkout</button>
+							<!-- loading animation -->
+							<button class="btn btn-danger btn-lg btn-loading" type="button" disabled>
+								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+								Loading...
+							</button>
+						</nav>
+					</div>
+				</form>
 			</div>
-		</form>
+			<!-- if checkbox #dropship is clicked -->
+			<div id="non-dropshipping">
+				<form action="<?= base_url('home/addTempData'); ?>" method="post" class="tempData">
+					<div class="form-group">
+						<label for="courier">Pilih Jasa Kirim</label>
+						<select class="form-control courier" id="Courier" name="courier">
+							<option value="" >Pilih Ongkir</option>	
+							<option value="jne" >JNE Reguler</option>
+							<option value="pos" >POS Kilat Khusus</option>
+						</select>
+					</div>
+					<input type="hidden" name="weight" value="<?= $weight; ?>">
+					<!-- loading animation -->
+					<li class="spinner-border text-info loading" role="status">
+						<span class="sr-only">Loading...</span>
+					</li>
+					<div class="Ongkir"></div>
+					<!-- alert shopping cart empty -->
+					<div class="alert alert-danger alert-dismissible fade show alertShoppingEmpty" role="alert">
+						<strong>CHECKOUT GAGAL!</strong> Mohon isi keranjang belanja
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- alert shopping cart empty -->
+					<div class="alert alert-danger alert-dismissible fade show alertunselectedcourier" role="alert">
+						<strong>CHECKOUT GAGAL!</strong> Mohon pilih kurir
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- buttom navbar visible only small dan medium size -->
+					<div class="d-lg-none">
+						<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
+							<ul class="d-flex flex-column navbar-nav mr-auto">
+								<li class="nav-item active">
+								<small>Total Belanja dan ongkir</small>
+								<!-- loading animation -->
+								<li class="spinner-border text-info loading" role="status">
+									<span class="sr-only">Loading...</span>
+								</li>
+								<li class="nav-item font-weight-bolder text-danger h5 totalShopping" value="0">Rp 0</li>
+							</ul>
+							<input type="hidden" value="" class="Total-Shopping" name="total-shopping">
+							<button type="submit" class="btn btn-danger btn-lg btn-checkout">Checkout</button>
+							<!-- loading animation -->
+							<button class="btn btn-danger btn-lg btn-loading" type="button" disabled>
+								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+								Loading...
+							</button>
+						</nav>
+					</div>
+				</form>
+			</div>
+
 		<?php 	else : ?>
 			<div class="d-lg-none">
 				<nav class="navbar navbar-expand-lg navbar-light shadow-lg mb-1 bg-white rounded border fixed-bottom">
@@ -215,7 +292,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-					<button type="submit" id="edit_cart" class="btn btn-primary">Tambah Jumlah Produk</button>
+					<button type="submit" id="edit_cart" class="btn btn-primary editCart">Tambah Jumlah Produk</button>
 				</div>
 				</form>
 			</div>

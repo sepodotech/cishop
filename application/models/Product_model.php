@@ -79,6 +79,7 @@ class Product_model extends CI_Model
         $result = $this->db->get_where('product_option' , ['id' => $id])->row_array();
         return $result;
     }
+
 	public function addProduct()
 	{
 		$data = [
@@ -104,15 +105,12 @@ class Product_model extends CI_Model
         $config['allowed_types']        = 'gif|jpg|png';
         $config['file_name']            = $dt;
         $config['max_size']             = 5140;
-        // $config['max_width']            = 1024;
-        // $config['max_height']           = 768;
 
         $this->load->library('upload', $config);
 
         if($this->upload->do_upload('image')){
             return $this->upload->data('file_name');
         }
-
         return 'default.jpg';
     }
 
@@ -124,17 +122,11 @@ class Product_model extends CI_Model
 
     private function _deleteImage($id)
     {
-    $dt = $this->getProductById($id);
-    
-    
+        $dt = $this->getProductById($id);
         if ($dt['image'] != "default.jpg") {
             $filename = explode(".", $dt['image'])[0];
             return array_map('unlink', glob(FCPATH."./assets/upload/products/$filename.*"));
         }
-    }
-    public function createOrder()
-    {
-        
     }
 
 }

@@ -79,7 +79,7 @@
 	                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
 	                  Setting
 	                </a> -->
-					<a class="dropdown-item mb-3" href="<?= base_url('home/setting'); ?>">
+					<a class="dropdown-item mb-3" href="<?= base_url('home/transaction'); ?>">
 					  <i class="fas fa-box-open fa-sm fa-fw mr-2 text-gray-400"></i>
 					  <!-- <i class="fas fa-box-open"></i> -->
 	                  Transaksi

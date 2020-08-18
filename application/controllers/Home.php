@@ -59,6 +59,7 @@ class Home extends CI_Controller {
 		$data['title']		= 'Keranjang Saya';
 		$data['backArrow']	= 'home';
 		$data['weight'] 	= $this->weight;
+
 		
 		$this->load->view('store/templates/header',$data);
 		$this->load->view('store/templates/simple_topbar',$data);
@@ -98,59 +99,61 @@ class Home extends CI_Controller {
 		redirect('home/myCart');
 	}
 
+	public function addTempData()
+	{
+		
+		if ($this->input->post('dropship-name')){
+			$data = [
+				'drop_name'  		=> htmlspecialchars($this->input->post('dropship-name',true)),
+				'drop_phone'     	=> htmlspecialchars($this->input->post('dropship-phone',true)),
+				'drop_province' 	=> htmlspecialchars($this->input->post('dropship-province',true)),
+				'drop_city' 		=> htmlspecialchars($this->input->post('dropship-city',true)),
+				'drop_subdistrict' 	=> htmlspecialchars($this->input->post('dropship-subdistrict',true)),
+				'drop_detail' 		=> htmlspecialchars($this->input->post('dropship-complite-address',true)),
+				'courier' 			=> htmlspecialchars($this->input->post('courier',true)),
+				'weight' 			=> htmlspecialchars($this->input->post('weight',true)),
+				'shopping' 			=> htmlspecialchars($this->input->post('total-shopping',true))
+			];
+		}else{
+			$data = [
+				'courier' 			=> htmlspecialchars($this->input->post('courier',true)),
+				'weight' 			=> htmlspecialchars($this->input->post('weight',true)),
+				'shopping' 			=> htmlspecialchars($this->input->post('total-shopping',true))
+			];
+		}
+
+		$this->session->set_userdata($data);
+		redirect('Home/checkout');
+	}
+
+	public function deleteTempData()
+	{
+		$this->session->unset_userdata('drop_name');
+		$this->session->unset_userdata('drop_phone');
+		$this->session->unset_userdata('drop_province');
+		$this->session->unset_userdata('drop_city');
+		$this->session->unset_userdata('drop_subdistrict');
+		$this->session->unset_userdata('drop_detail');
+		$this->session->unset_userdata('courier');
+		$this->session->unset_userdata('weight');
+		$this->session->unset_userdata('shopping');
+		redirect('Home/myCart');
+	}
+
 	public function checkout()
 	{
 		$data['user'] 		= $this->user;
 		$data['backArrow']	= 'home/myCart';
 		$data['title']		= 'Checkout';
 		$data['button']		= 'Buat Pesanan';
+		$data['weight'] 	= $this->weight;
 
 		$this->load->view('store/templates/header',$data);
 		$this->load->view('store/templates/simple_topbar',$data);
 		$this->load->view('store/checkout',$data);
-		$this->load->view('store/templates/footer');
+		$this->load->view('store/templates/footer',$data);
 	}
 
-	public function addTempAddress()
-	{
-		$data = [
-
-			'name'  		=> htmlspecialchars($this->input->post('name',true)),
-			'phone'     	=> htmlspecialchars($this->input->post('phone',true)),
-			'province' 		=> htmlspecialchars($this->input->post('province',true)),
-			'city' 			=> htmlspecialchars($this->input->post('city',true)),
-			'subdistrict' 	=> htmlspecialchars($this->input->post('subdistrict',true)),
-			'detail' 		=> htmlspecialchars($this->input->post('detail-address',true)),
-			'courier' 		=> htmlspecialchars($this->input->post('courier',true)),
-			'weight' 		=> htmlspecialchars($this->input->post('weight',true)),
-			'shopping' 		=> htmlspecialchars($this->input->post('total-shopping',true))
-			
-		];
-		$this->session->set_userdata($data);
-		redirect('Home/checkout');
-	}
-
-	public function deleteTempAddress()
-	{
-		$this->session->unset_userdata('name','phone','province','city','subdistrict','detail','courier','weight','shopping');
-		redirect('Home/myCart');
-	}
-	public function payment()
-	{
-		$data = [
-
-			'product-name'  		=> $this->input->post('product-name'),
-			'qty'     				=> $this->input->post('phone',true),
-			'total-shopping' 		=> $this->input->post('total-shopping',true),
-			'buyer-name'  			=> $this->input->post('buyer-name',true),
-			'phone'     			=> $this->input->post('phone',true),
-			'province' 				=> $this->input->post('province',true),
-			'city' 					=> $this->input->post('city',true),
-			'subdistrict' 			=> $this->input->post('subdistrict',true),
-			'detail' 				=> $this->input->post('detail-address',true),
-			'courier' 				=> $this->input->post('courier',true)
-		];
-	}
 	/*---------------view/store/setting---------------------*/
 	public function profile()
 	{
@@ -242,8 +245,52 @@ class Home extends CI_Controller {
 			}
 		}
 	}
-	/*---------------getting variant product---------------------*/
-	public function getVariantProduct(){
+	
 
+	public function productOrder(){
+		foreach($this->cart->contents() as $key => $value){
+			$data = [
+				'product_id' 		=> $value['id'],
+				'user_id'			=>$this->user['id'],
+				'time'				=>time(),
+				'product_name'		=>$value['name'],
+				'product_image'		=>$value['image'],
+				'product_quantity'	=>$value['qty'],
+				'product_option'	=>$value['option1']
+			];
+			$this->db->insert('product_order',$data);
+		}
+		$detailOrder = [
+			'user_id'			=>$this->user['id'],
+			'time'				=>time(),
+			'courier'			=>$this->session->userdata('courier'),
+			'weight'			=>$this->session->userdata('weight'),
+			'total'				=>$this->session->userdata('shopping'),
+			'was_payed'			=>0,
+			'payment_slip'		=>'',
+			'dropship_name'		=>$this->session->userdata('drop_name'),
+			'dropship_phone'	=>$this->session->userdata('drop_phone'),
+			'dropship_address'	=>$this->session->userdata('drop_nation').'/'.$this->session->userdata('drop_province').'/'.$this->session->userdata('drop_city').'/'.$this->session->userdata('drop_subdistrict').'/'.$this->session->userdata('drop_detail') ,
+		];
+		$this->db->insert('detail_order', $detailOrder);
+		$this->cart->destroy();
+		redirect('home/transaction');
+	}
+
+	public function transaction(){
+		$data['user'] 		= $this->user;
+		$data['title']		= 'Edit Profil';
+		$data['weight'] 	= $this->weight;
+		$data['order']		= $this->Order->getOrder();
+
+		$this->load->view('store/templates/header',$data);
+		$this->load->view('store/templates/topbar',$data);
+		$this->load->view('store/setting/transaction',$data);
+		$this->load->view('store/templates/footer',$data);
+	}
+
+	public function uploadBill(){
+		var_dump($_FILES);
+		die();
 	}
 }

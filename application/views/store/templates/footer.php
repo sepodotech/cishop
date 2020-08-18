@@ -80,13 +80,16 @@
 				
 				let shippingCost = formatNumber(data);
 				let biayaOngkir = `<P>biaya ongkirnya Rp `+shippingCost+`</P>`;
-				$("#ongkir").html(biayaOngkir);
+				$(".Ongkir").html(biayaOngkir);
 
 				let totalShoppig;
+				let formNumbTotalShopping;
 				totalShoppig = parseInt(data)+totalBarang;
-				totalShoppig = formatNumber(totalShoppig);
-				$("#totalShopping").text("Rp "+totalShoppig);
-				$("#total-shopping").val(totalShoppig);
+				formNumbTotalShopping = formatNumber(totalShoppig);
+				let shoppingHtml = `<li class="nav-item font-weight-bolder text-danger h5 totalShopping" id="totalShopping" value="`+ totalShoppig +`">Rp `+formNumbTotalShopping+`</li>`
+				// $("#totalShopping").text("Rp "+formNumbTotalShopping);
+				$(".totalShopping").replaceWith(shoppingHtml);
+				$(".Total-Shopping").val(totalShoppig);
 			});
 		}
 
@@ -156,15 +159,15 @@
 		$('#dropship').on('click', function(){
 			if ( $(this).prop('checked') ) {
 				$('#dropshipping').fadeIn();
-				$('#totalShopping').text('Rp 0');
+				$('#non-dropshipping').hide();
+				$('.totalShopping').text('Rp 0');
 				$(".user-province").on("change", function(e){
 					e.preventDefault();
 					let provId = $('option:selected', this).val();
 					let prov = $('option:selected', this).text();
 					$('.user-city option:gt(0)').remove();
-					$('.province').val(prov);
+					$('#drop-province').val(prov);
 					$('.courier').val('');
-					console.log(provId);
 					city(provId);
 				});
 
@@ -172,7 +175,7 @@
 					e.preventDefault();
 					var option = $('option:selected', this).val();
 					let city = $('option:selected', this).text();
-					$('.city').val(city);
+					$('#drop-city').val(city);
 					$('.courier').val('');
 				});
 				$(".courier").on("change", function(e){
@@ -186,15 +189,16 @@
 			} 
 			else {
 				$('#dropshipping').hide();
-				$('#totalShopping').text('Rp 0');
+				$('#non-dropshipping').show();
+				$('.totalShopping').text('Rp 0');
 				$('#ongkir').html('');
 				$('#dropship-name').val('');
 				$('#dropship-phone').val('');
 				$('#dropship-nation').val('');
 				$('#dropship-province').val('');
 				$('#dropship-city').val('');
-				$('.dropship-province').val('');
-				$('.dropship-city').val('');
+				$('.Province').val('');
+				$('.City').val('');
 				$('#subdistrict').val('');
 				$('#complite_address').val('');
 				$(".courier").on("change", function(e){
@@ -213,23 +217,68 @@
 		$('.btn-loading').hide();
 		$(document)
 		.ajaxStart(function () {
-			$('#totalShopping').hide();
+			$('.totalShopping').hide();
 			$('.btn-checkout').hide();
 			$('#dropship-city').hide();
-			$('#ongkir').hide();
+			$('.Ongkir').hide();
 			$loading.show();
 			$('.btn-loading').show();
 		})
 		.ajaxStop(function () {
 			$('.btn-loading').hide();
 			$loading.hide();
-			$('#totalShopping').show();
+			$('.totalShopping').show();
 			$('.btn-checkout').show();
 			$('#dropship-city').show();
-			$('#ongkir').show();
+			$('.Ongkir').show();
+		});
+		// check whether total shopping 0 or not (because an empty cart )
+		$('.alertShoppingEmpty').hide();
+		$(".courier").on("change", function(e){
+			$('.btn-checkout').on('click', function(){
+				let test = $('.totalShopping').val();
+				if (test == 0){
+					$('.tempData').submit(function(e){
+					e.preventDefault();
+					});
+					$('.alertShoppingEmpty').show();
+				}else{
+					$('.tempData').submit(function(){
+						$(this).find('.btn-checkout').prop('disable', false);
+					});
+				}
+			});
+		});
+		// check whether total shopping 0 or not (because unselecting courier)
+		$('.alertunselectedcourier').hide();
+		$('.btn-checkout').on('click', function(){
+			let test = $('.totalShopping').val();
+			if (test == 0){
+				$('.tempData').submit(function(e){
+				e.preventDefault();
+				});
+				$('.alertunselectedcourier').show();
+			}else{
+				$('.tempData').submit(function(){
+					$(this).find('.btn-checkout').prop('disable', false);
+				});
+			}
 		});
 	/*-------------end script page my_cart shipping--------------*/
 
+	/*-------------start script page transaction--------------*/
+		$('.detail-order').css({height:'85px', overflow:'hidden'});
+		$('.show-less').hide();
+		$('.show-more').on('click', function(){
+			$('.detail-order').css({height:'200px', overflow:'scroll'});
+			$('.show-less').show();
+			$('.show-more').hide();
+		});
+		$('.show-less').on('click', function(){
+			$('.detail-order').css({height:'85px', overflow:'hidden'});
+			$('.show-less').hide();
+			$('.show-more').show();
+		})
 	});
 </script>
 
