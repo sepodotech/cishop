@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2020 at 11:04 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.4
+-- Waktu pembuatan: 19 Okt 2020 pada 13.10
+-- Versi server: 10.4.14-MariaDB
+-- Versi PHP: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_access_menu`
+-- Struktur dari tabel `admin_access_menu`
 --
 
 CREATE TABLE `admin_access_menu` (
@@ -34,7 +34,7 @@ CREATE TABLE `admin_access_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `admin_access_menu`
+-- Dumping data untuk tabel `admin_access_menu`
 --
 
 INSERT INTO `admin_access_menu` (`id`, `role_id`, `menu_id`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `admin_access_menu` (`id`, `role_id`, `menu_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_menu`
+-- Struktur dari tabel `admin_menu`
 --
 
 CREATE TABLE `admin_menu` (
@@ -58,7 +58,7 @@ CREATE TABLE `admin_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `admin_menu`
+-- Dumping data untuk tabel `admin_menu`
 --
 
 INSERT INTO `admin_menu` (`id`, `menu`) VALUES
@@ -71,7 +71,7 @@ INSERT INTO `admin_menu` (`id`, `menu`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_submenu`
+-- Struktur dari tabel `admin_submenu`
 --
 
 CREATE TABLE `admin_submenu` (
@@ -84,7 +84,7 @@ CREATE TABLE `admin_submenu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `admin_submenu`
+-- Dumping data untuk tabel `admin_submenu`
 --
 
 INSERT INTO `admin_submenu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
@@ -98,7 +98,7 @@ INSERT INTO `admin_submenu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Struktur dari tabel `categories`
 --
 
 CREATE TABLE `categories` (
@@ -110,7 +110,7 @@ CREATE TABLE `categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order`
+-- Struktur dari tabel `order`
 --
 
 CREATE TABLE `order` (
@@ -127,7 +127,7 @@ CREATE TABLE `order` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Struktur dari tabel `product`
 --
 
 CREATE TABLE `product` (
@@ -144,7 +144,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product`
+-- Dumping data untuk tabel `product`
 --
 
 INSERT INTO `product` (`id`, `image`, `name`, `category_id`, `description`, `quantity`, `price`, `member_price`, `weight`, `shipping_origin`) VALUES
@@ -162,7 +162,35 @@ INSERT INTO `product` (`id`, `image`, `name`, `category_id`, `description`, `qua
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `product_option`
+--
+
+CREATE TABLE `product_option` (
+  `id` int(11) NOT NULL,
+  `product_id` varchar(50) NOT NULL,
+  `option_name` varchar(100) NOT NULL,
+  `option_value` varchar(50) NOT NULL,
+  `option_stok` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `product_option2`
+--
+
+CREATE TABLE `product_option2` (
+  `id` int(11) NOT NULL,
+  `product_option_id` varchar(50) NOT NULL,
+  `option2_name` varchar(50) NOT NULL,
+  `option2_value` varchar(50) NOT NULL,
+  `option2_stok` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
@@ -178,7 +206,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `email`, `image`, `password`, `role_id`, `member_status`, `is_active`, `date_created`) VALUES
@@ -190,10 +218,10 @@ INSERT INTO `user` (`id`, `username`, `email`, `image`, `password`, `role_id`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_address`
+-- Struktur dari tabel `user_detail`
 --
 
-CREATE TABLE `user_address` (
+CREATE TABLE `user_detail` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `user_id` int(11) DEFAULT NULL COMMENT 'foreign key user table',
@@ -209,7 +237,7 @@ CREATE TABLE `user_address` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_role`
+-- Struktur dari tabel `user_role`
 --
 
 CREATE TABLE `user_role` (
@@ -218,7 +246,7 @@ CREATE TABLE `user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_role`
+-- Dumping data untuk tabel `user_role`
 --
 
 INSERT INTO `user_role` (`id`, `role`) VALUES
@@ -230,7 +258,7 @@ INSERT INTO `user_role` (`id`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `voucher`
+-- Struktur dari tabel `voucher`
 --
 
 CREATE TABLE `voucher` (
@@ -248,125 +276,149 @@ CREATE TABLE `voucher` (
 --
 
 --
--- Indexes for table `admin_access_menu`
+-- Indeks untuk tabel `admin_access_menu`
 --
 ALTER TABLE `admin_access_menu`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `admin_menu`
+-- Indeks untuk tabel `admin_menu`
 --
 ALTER TABLE `admin_menu`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `admin_submenu`
+-- Indeks untuk tabel `admin_submenu`
 --
 ALTER TABLE `admin_submenu`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `categories`
+-- Indeks untuk tabel `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `order`
+-- Indeks untuk tabel `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `product`
+-- Indeks untuk tabel `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `product_option`
+--
+ALTER TABLE `product_option`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `product_option2`
+--
+ALTER TABLE `product_option2`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_address`
+-- Indeks untuk tabel `user_detail`
 --
-ALTER TABLE `user_address`
+ALTER TABLE `user_detail`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_role`
+-- Indeks untuk tabel `user_role`
 --
 ALTER TABLE `user_role`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `voucher`
+-- Indeks untuk tabel `voucher`
 --
 ALTER TABLE `voucher`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `admin_access_menu`
+-- AUTO_INCREMENT untuk tabel `admin_access_menu`
 --
 ALTER TABLE `admin_access_menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `admin_menu`
+-- AUTO_INCREMENT untuk tabel `admin_menu`
 --
 ALTER TABLE `admin_menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `admin_submenu`
+-- AUTO_INCREMENT untuk tabel `admin_submenu`
 --
 ALTER TABLE `admin_submenu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `categories`
+-- AUTO_INCREMENT untuk tabel `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `order`
+-- AUTO_INCREMENT untuk tabel `order`
 --
 ALTER TABLE `order`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product`
+-- AUTO_INCREMENT untuk tabel `product`
 --
 ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT untuk tabel `product_option`
+--
+ALTER TABLE `product_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `product_option2`
+--
+ALTER TABLE `product_option2`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `user_address`
+-- AUTO_INCREMENT untuk tabel `user_detail`
 --
-ALTER TABLE `user_address`
+ALTER TABLE `user_detail`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user_role`
+-- AUTO_INCREMENT untuk tabel `user_role`
 --
 ALTER TABLE `user_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `voucher`
+-- AUTO_INCREMENT untuk tabel `voucher`
 --
 ALTER TABLE `voucher`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
